@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item android:title="today"
+        android:id="@+id/bni_today"
+        android:icon="@drawable/ic_plus"
+        android:fontFamily="@font/nanumbarungothic"
+        />
+    <item android:title="day_list"
+        android:id="@+id/bni_day_list"
+        android:icon="@drawable/ic_plus"
+        android:fontFamily="@font/nanumbarungothic"
+        />
+    <item android:title="month"
+        android:id="@+id/bni_month"
+        android:icon="@drawable/ic_plus"
+        android:fontFamily="@font/nanumbarungothic"
+        />
+</menu>
