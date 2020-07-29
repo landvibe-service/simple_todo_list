@@ -13,7 +13,14 @@
         android:minHeight="?attr/actionBarSize"
         android:elevation="2dp">
 
-
+        <Button
+            android:id="@+id/fragment_today_today_button"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Today"
+            android:textSize="13dp"
+            android:layout_gravity="left"
+            />
         <ImageButton
             android:id="@+id/ibtn_prev_arrow"
             android:layout_width="40dp"

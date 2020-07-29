@@ -10,14 +10,14 @@ import com.softsquared.myapplication.R
 import com.softsquared.myapplication.db.AppDatabase
 import com.softsquared.myapplication.today.TodayFragment
 import kotlinx.android.synthetic.main.item_schedule.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MonthRecyclerAdapter(val monthFragment: MonthFragment, val todayDB: AppDatabase) :
     RecyclerView.Adapter<ViewHolderHelper>() {
-
+    var choosedDateFragment: TodayFragment? = null
     val baseCalendar = BaseCalendar()
     lateinit var curYearMonth: String
-
     init {
         baseCalendar.initBaseCalendar {
             curYearMonth = refreshView(it)
@@ -42,29 +42,39 @@ class MonthRecyclerAdapter(val monthFragment: MonthFragment, val todayDB: AppDat
         )
         else holder.itemView.tv_date.setTextColor(Color.parseColor("#676d6e"))
 
-        if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
+        val sdf = SimpleDateFormat("yyyy-MM", Locale.KOREAN)
+
+        var cur = sdf.format(baseCalendar.calendar.time)
+        var curDate = baseCalendar.data[position].toString()
+        if(baseCalendar.data[position] < 10) {
+            curDate = "0"+curDate
+        }
+        if (position < baseCalendar.prevMonthTailOffset) {
             holder.itemView.tv_date.alpha = 0.3f
-        } else {
+            cur = baseCalendar.getPrevMonth() + "-" + curDate
+        }else if(position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate){
+            holder.itemView.tv_date.alpha = 0.3f
+            cur = baseCalendar.getNextMonth() + "-" + curDate
+        }
+        else {
             holder.itemView.tv_date.alpha = 1f
+            cur  = cur + "-" + curDate
         }
         holder.itemView.tv_date.text = baseCalendar.data[position].toString()
-        var cur = "${curYearMonth + "-" + baseCalendar.data[position].toString()}"
+
 
         var inMonthRecyclerAdapter = InMonthRecyclerAdapter(
             monthFragment.activity!!,
-            ArrayList(todayDB.todoDao().getDayList(cur))
+            ArrayList(todayDB.todoDao().getDayList(cur)),
+            cur,
+            monthFragment
         )
         holder.itemView.rv_item_contents.adapter = inMonthRecyclerAdapter
-
         val lm = LinearLayoutManager(monthFragment.activity)
         holder.itemView.rv_item_contents.layoutManager = lm
 
-        todayDB.todoDao().getDayList(cur)
-
         holder.itemView.setOnClickListener {
-            Log.e(cur, "is clicked")
-            val fragment = TodayFragment(cur)
-            monthFragment.activity!!.supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout, fragment, fragment.javaClass.getSimpleName()) .commit()
+            monthFragment.mainActivity.reloadTodayFragment(TodayFragment(cur))
         }
     }
 

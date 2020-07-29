@@ -1,20 +1,25 @@
 package com.softsquared.myapplication.month
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.softsquared.myapplication.BaseFragment
+import com.softsquared.myapplication.MainActivity
 import com.softsquared.myapplication.R
 import com.softsquared.myapplication.db.AppDatabase
 import kotlinx.android.synthetic.main.fragment_month.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MonthFragment : BaseFragment(){
-
+class MonthFragment : BaseFragment{
+    constructor(mainActivity: MainActivity){
+        this.mainActivity = mainActivity
+    }
+    val mainActivity: MainActivity
     lateinit var scheduleRecyclerViewAdapter: MonthRecyclerAdapter
     lateinit var today_db: AppDatabase
     override fun onCreateView(
@@ -30,22 +35,22 @@ class MonthFragment : BaseFragment(){
 
     override fun onResume() {
         super.onResume()
+        Log.e("resumed", "resumed")
         initView()
     }
-
-    fun initView() {
-
+    fun reloadView(){
         scheduleRecyclerViewAdapter = MonthRecyclerAdapter(this, today_db)
-
+        rv_schedule.adapter = scheduleRecyclerViewAdapter
+    }
+    fun initView() {
+        scheduleRecyclerViewAdapter = MonthRecyclerAdapter(this, today_db)
         rv_schedule.layoutManager = GridLayoutManager(context, BaseCalendar.DAYS_OF_WEEK)
         rv_schedule.adapter = scheduleRecyclerViewAdapter
         rv_schedule.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
         rv_schedule.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
         tv_prev_month.setOnClickListener {
             scheduleRecyclerViewAdapter.changeToPrevMonth()
         }
-
         tv_next_month.setOnClickListener {
             scheduleRecyclerViewAdapter.changeToNextMonth()
         }
@@ -54,6 +59,7 @@ class MonthFragment : BaseFragment(){
     fun refreshCurrentMonth(calendar: Calendar) : String{
         val sdf = SimpleDateFormat("yyyy-MM", Locale.KOREAN)
         tv_current_month.text = sdf.format(calendar.time)
+        Log.e("refreshCurrentMonth", tv_current_month.text.toString())
         return tv_current_month.text.toString()
     }
 }

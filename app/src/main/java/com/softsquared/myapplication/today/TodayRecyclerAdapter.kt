@@ -16,7 +16,9 @@ import kotlinx.android.synthetic.main.item_today.view.*
 
 class TodayRecyclerAdapter(
     val context: Context,
-    val items: ArrayList<Todo>,
+    val todayFragment: TodayFragment,
+    val curDate: String,
+    var items: ArrayList<Todo>,
     val viewBinderHelper: ViewBinderHelper = ViewBinderHelper(),
     val itemClick: (Todo) -> Unit
 ) :
@@ -31,6 +33,16 @@ class TodayRecyclerAdapter(
         }
         items.remove(del)
 
+        notifyDataSetChanged()
+    }
+
+    fun modifyItem(position: Int){
+        val mod = items.get(position)
+        var today_db = AppDatabase.getInstance(context)
+
+        if (today_db != null) {
+            todayFragment.showAlertDialog(today_db, 2, mod)
+        }
         notifyDataSetChanged()
     }
 
@@ -49,7 +61,11 @@ class TodayRecyclerAdapter(
                 removeItem(position)
             }
         }
+        val btn_modify = holder?.btn_modify
+        btn_modify?.setOnClickListener {
 
+            modifyItem(position)
+        }
 
         holder.itemView.tv_contents.setOnClickListener {
             var today_db = AppDatabase.getInstance(context)

@@ -1,5 +1,6 @@
 package com.softsquared.myapplication.month
 
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -46,7 +47,17 @@ class BaseCalendar {
         }
         makeMonthDate(refreshCallback)
     }
-
+    fun getPrevMonth() : String{
+        var ret = Calendar.getInstance()
+        if(calendar.get(Calendar.MONTH) == 0){
+            ret.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 1)
+            ret.set(Calendar.MONTH, Calendar.DECEMBER)
+        }else {
+            ret.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1)
+        }
+        val sdf = SimpleDateFormat("yyyy-MM", Locale.KOREAN)
+        return sdf.format(ret.time)
+    }
     /**
      * Change to next month.
      */
@@ -59,6 +70,18 @@ class BaseCalendar {
         }
         makeMonthDate(refreshCallback)
     }
+    fun getNextMonth() : String{
+        var ret = Calendar.getInstance()
+        if(calendar.get(Calendar.MONTH) == Calendar.DECEMBER){
+            ret.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1)
+            ret.set(Calendar.MONTH, 0)
+        }else {
+            ret.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1)
+        }
+        val sdf = SimpleDateFormat("yyyy-MM", Locale.KOREAN)
+        return sdf.format(ret.time)
+    }
+
 
     /**
      * make month date.
