@@ -24,6 +24,7 @@ class BaseCalendar {
 
     var data = arrayListOf<Int>()
 
+
     init {
         calendar.time = Date()
     }
@@ -87,21 +88,14 @@ class BaseCalendar {
      * make month date.
      */
     private fun makeMonthDate(refreshCallback: (Calendar) -> Unit) {
-
         data.clear()
-
         calendar.set(Calendar.DATE, 1)
-
         currentMonthMaxDate = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-
         prevMonthTailOffset = calendar.get(Calendar.DAY_OF_WEEK) - 1
-
         makePrevMonthTail(calendar.clone() as Calendar)
         makeCurrentMonth(calendar)
-
         nextMonthHeadOffset = LOW_OF_CALENDAR * DAYS_OF_WEEK - (prevMonthTailOffset + currentMonthMaxDate)
         makeNextMonthHead()
-
         refreshCallback(calendar)
     }
 
@@ -112,7 +106,6 @@ class BaseCalendar {
         calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1)
         val maxDate = calendar.getActualMaximum(Calendar.DATE)
         var maxOffsetDate = maxDate - prevMonthTailOffset
-
         for (i in 1..prevMonthTailOffset) data.add(++maxOffsetDate)
     }
 

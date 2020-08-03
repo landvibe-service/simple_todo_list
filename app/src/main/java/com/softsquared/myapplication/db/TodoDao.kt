@@ -11,6 +11,9 @@ interface TodoDao {
     @Query("SELECT * FROM Todo WHERE day = :date")
     fun getDayList(date: String): List<Todo>
 
+    @Query("SELECT IFNULL(MAX(gid) + 1, 1) FROM Todo")
+    fun getNewGid(): Long
+
     @Insert
     fun insert(todo: Todo)
 

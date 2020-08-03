@@ -1,6 +1,7 @@
 package com.softsquared.myapplication.month
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ class InMonthRecyclerAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder?.bind(items[position], context)
         holder.itemView.setOnClickListener {
+            Log.e("현재 날짜", curDate)
             monthFragment.mainActivity.reloadTodayFragment(TodayFragment(curDate))
         }
     }

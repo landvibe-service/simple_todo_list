@@ -1,31 +1,25 @@
-package com.softsquared.myapplication.month
+package com.softsquared.myapplication.today
 
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.myapplication.R
-import com.softsquared.myapplication.db.AppDatabase
-import com.softsquared.myapplication.today.TodayFragment
+import com.softsquared.myapplication.month.BaseCalendar
+import com.softsquared.myapplication.month.ViewHolderHelper
 import kotlinx.android.synthetic.main.item_schedule.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MonthRecyclerAdapter(val monthFragment: MonthFragment, val todayDB: AppDatabase) :
+class DialogRecyclerAdapter(val dialog: DialogPlanAdder, val set_data: MutableSet<String>) :
     RecyclerView.Adapter<ViewHolderHelper>() {
     val baseCalendar = BaseCalendar()
-    lateinit var curYearMonth: String
-    init {
-        baseCalendar.initBaseCalendar {
-            curYearMonth = refreshView(it)
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderHelper {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_schedule, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_schedule_dialog, parent, false)
         return ViewHolderHelper(view)
     }
 
@@ -45,37 +39,53 @@ class MonthRecyclerAdapter(val monthFragment: MonthFragment, val todayDB: AppDat
 
         var cur = sdf.format(baseCalendar.calendar.time)
         var curDate = baseCalendar.data[position].toString()
-        if(baseCalendar.data[position] < 10) {
-            curDate = "0"+curDate
+        if (baseCalendar.data[position] < 10) {
+            curDate = "0" + curDate
         }
         if (position < baseCalendar.prevMonthTailOffset) {
             holder.itemView.tv_date.alpha = 0.3f
             cur = baseCalendar.getPrevMonth() + "-" + curDate
-        }else if(position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate){
+        } else if (position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
             holder.itemView.tv_date.alpha = 0.3f
             cur = baseCalendar.getNextMonth() + "-" + curDate
-        }
-        else {
+        } else {
             holder.itemView.tv_date.alpha = 1f
             cur  = cur + "-" + curDate
         }
         holder.itemView.tv_date.text = baseCalendar.data[position].toString()
-
-
-        var inMonthRecyclerAdapter = InMonthRecyclerAdapter(
-            monthFragment.activity!!,
-            ArrayList(todayDB.todoDao().getDayList(cur)),
-            cur,
-            monthFragment
-        )
-        holder.itemView.rv_item_contents.adapter = inMonthRecyclerAdapter
-        val lm = LinearLayoutManager(monthFragment.activity)
-        holder.itemView.rv_item_contents.layoutManager = lm
-
-        holder.itemView.setOnClickListener {
-            var nCal = baseCalendar.calendar
-            monthFragment.mainActivity.reloadTodayFragment(TodayFragment(cur))
+        val item_layout = holder.itemView.findViewById<LinearLayout>(R.id.ll_item_dialog)
+        if(set_data.contains(cur)){
+            Log.e("포함됨 : ", cur)
+            item_layout.setBackgroundColor(Color.argb(255, 100, 100, 100))
+        }else{
+            item_layout.setBackgroundColor(Color.argb(255, 100, 200, 200))
         }
+        holder.itemView.setOnClickListener {
+            Log.e("선택된 날짜", cur)
+            if(set_data.contains(cur)){
+                set_data.remove(cur)
+                item_layout.setBackgroundColor(Color.argb(255, 100, 200, 200))
+                Log.e("set size : ", set_data.size.toString())
+            }else{
+                set_data.add(cur)
+                item_layout.setBackgroundColor(Color.argb(255, 100, 100, 100))
+                Log.e("set size : ", set_data.size.toString())
+            }
+        }
+    }
+
+
+    lateinit var curYearMonth: String
+
+    init {
+        baseCalendar.initBaseCalendar {
+            curYearMonth = refreshView(it)
+        }
+    }
+
+    private fun refreshView(calendar: Calendar): String {
+        notifyDataSetChanged()
+        return dialog.refreshCurrentMonth(calendar)
     }
 
     fun changeToPrevMonth() {
@@ -88,10 +98,5 @@ class MonthRecyclerAdapter(val monthFragment: MonthFragment, val todayDB: AppDat
         baseCalendar.changeToNextMonth {
             curYearMonth = refreshView(it)
         }
-    }
-
-    private fun refreshView(calendar: Calendar): String {
-        notifyDataSetChanged()
-        return monthFragment.refreshCurrentMonth(calendar)
     }
 }

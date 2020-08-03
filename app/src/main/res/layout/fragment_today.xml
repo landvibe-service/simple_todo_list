@@ -41,6 +41,16 @@
             android:longClickable="false"
             android:text="@string/app_name"
             android:textColor="@color/black"
+            android:layout_marginRight="5dp"
+            />
+        <TextView
+            android:fontFamily="@font/nanumbarungothic"
+            android:id="@+id/tv_fragment_today_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="요"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
             />
 
         <ImageButton

@@ -69,6 +69,8 @@ dependencies {
     // optional - Guava support for Room, including Optional and ListenableFuture
     implementation "androidx.room:room-guava:$room_version"
 
+    implementation 'com.prolificinteractive:material-calendarview:1.4.3'
+
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 }
