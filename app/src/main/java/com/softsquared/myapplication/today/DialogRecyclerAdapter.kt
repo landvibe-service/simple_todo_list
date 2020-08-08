@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.item_schedule.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+//이거도 adapter와 fragment간 관계 조금 정리 해바바~ 한번 시도해보길!!
 class DialogRecyclerAdapter(val dialog: DialogPlanAdder, val set_data: MutableSet<String>) :
     RecyclerView.Adapter<ViewHolderHelper>() {
     val baseCalendar = BaseCalendar()

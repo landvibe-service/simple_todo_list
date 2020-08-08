@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.myapplication.R
 import com.softsquared.myapplication.month.BaseCalendar
 import com.softsquared.myapplication.month.MonthRecyclerAdapter
+import kotlinx.android.synthetic.main.dialog_calendar.*
 import kotlinx.android.synthetic.main.fragment_month.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,6 +35,9 @@ class DialogPlanAdder(context: Context){
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
         dlg.setContentView(R.layout.dialog_calendar)     //다이얼로그에 사용할 xml 파일을 불러옴
         dlg.setCancelable(false)    //다이얼로그의 바깥 화면을 눌렀을 때 다이얼로그가 닫히지 않도록 함
+        //좋은데 kotlin-extension으로
+        //아래처럼 쓸수 있을거같아 선언안하고
+        //dlg.rv_dialog_calendar
         rv_dialog_calendar = dlg.findViewById(R.id.rv_dialog_calendar)
         btnOK = dlg.findViewById(R.id.btn_dialog_calendar_ok)
         btnCancel = dlg.findViewById(R.id.btn_dialog_calendar_cancle)
