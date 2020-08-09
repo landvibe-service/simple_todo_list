@@ -1,10 +1,10 @@
 package com.softsquared.myapplication.today
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.myapplication.R
 import com.softsquared.myapplication.month.BaseCalendar
@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_schedule.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DialogRecyclerAdapter(val dialog: DialogPlanAdder, val set_data: MutableSet<String>) :
+class DialogRecyclerAdapter(val dialog: DialogPlanMultiAdder, val set_data: MutableSet<String>) :
     RecyclerView.Adapter<ViewHolderHelper>() {
     val baseCalendar = BaseCalendar()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderHelper {
@@ -50,26 +50,23 @@ class DialogRecyclerAdapter(val dialog: DialogPlanAdder, val set_data: MutableSe
             cur = baseCalendar.getNextMonth() + "-" + curDate
         } else {
             holder.itemView.tv_date.alpha = 1f
-            cur  = cur + "-" + curDate
+            cur = cur + "-" + curDate
         }
         holder.itemView.tv_date.text = baseCalendar.data[position].toString()
         val item_layout = holder.itemView.findViewById<LinearLayout>(R.id.ll_item_dialog)
-        if(set_data.contains(cur)){
-            Log.e("포함됨 : ", cur)
-            item_layout.setBackgroundColor(Color.argb(255, 100, 100, 100))
-        }else{
-            item_layout.setBackgroundColor(Color.argb(255, 100, 200, 200))
+        val item_text = holder.itemView.findViewById<TextView>(R.id.tv_date)
+        if (set_data.contains(cur)) {
+            item_text.setBackgroundResource(R.drawable.ic_selected_back)
+        } else {
+            item_text.setBackgroundColor(Color.TRANSPARENT)
         }
         holder.itemView.setOnClickListener {
-            Log.e("선택된 날짜", cur)
-            if(set_data.contains(cur)){
+            if (set_data.contains(cur)) {
                 set_data.remove(cur)
-                item_layout.setBackgroundColor(Color.argb(255, 100, 200, 200))
-                Log.e("set size : ", set_data.size.toString())
-            }else{
+                item_text.setBackgroundColor(Color.TRANSPARENT)
+            } else {
                 set_data.add(cur)
-                item_layout.setBackgroundColor(Color.argb(255, 100, 100, 100))
-                Log.e("set size : ", set_data.size.toString())
+                item_text.setBackgroundResource(R.drawable.ic_selected_back)
             }
         }
     }

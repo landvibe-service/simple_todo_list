@@ -51,8 +51,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#e0e7ee"
+            android:layout_height="40dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -61,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="SUN"
+                android:text="일"
                 android:textColor="#969a9b"
                 android:textSize="10dp"
                 android:textStyle="bold" />
@@ -71,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="MON"
+                android:text="월"
                 android:textColor="#969a9b"
                 android:textSize="10dp"
                 android:textStyle="bold" />
@@ -81,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="TUE"
+                android:text="화"
                 android:textColor="#969a9b"
                 android:textSize="10dp"
                 android:textStyle="bold" />
@@ -91,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="WED"
+                android:text="수"
                 android:textColor="#969a9b"
                 android:textSize="10dp"
                 android:textStyle="bold" />
@@ -101,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="THU"
+                android:text="목"
                 android:textColor="#969a9b"
                 android:textSize="10dp"
                 android:textStyle="bold" />
@@ -111,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="FRI"
+                android:text="금"
                 android:textColor="#969a9b"
                 android:textSize="10dp"
                 android:textStyle="bold" />
@@ -121,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="SAT"
+                android:text="토"
                 android:textColor="#969a9b"
                 android:textSize="10dp"
                 android:textStyle="bold" />
@@ -132,6 +131,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constrainedHeight="true"
+            android:paddingRight="10dp"
             >
 
         </androidx.recyclerview.widget.RecyclerView>
