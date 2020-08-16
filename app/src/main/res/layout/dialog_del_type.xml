@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="20dp"
+    android:paddingLeft="20dp"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="주기성이 있는 일정 입니다. 삭제 방식을 선택하세요."
+        />
+    <RadioGroup
+        android:id="@+id/rg_type_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/rbtn_type_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="단일 삭제"
+            android:checked="true"
+            />
+        <RadioButton
+            android:id="@+id/rbtn_type_multi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="그룹 전체 삭제"
+            />
+    </RadioGroup>
+</LinearLayout>

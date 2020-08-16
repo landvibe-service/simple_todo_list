@@ -15,6 +15,11 @@ import kotlinx.android.synthetic.main.fragment_month.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+//달력은 잘만들었고 잘노출한거같아
+//mainactivity를 가지고 있는건 좋지 않은 것 같은데.. mainActivity를 이렇게 접근하지 않고,
+//adapter에서 fragment를 가지고 있는것도 좋은 구조가 아닌 것 같고.
+//fragment에서 adapter를 생성할때 click하면 할 일을 넘겨주는 쪽이 좋은거같고
+//fragment에서 activity 접근할 때는 fragment.activity as MainActivity 이렇게 될 것 같은데 한번 확인해보고 모르면 물어봐줘~
 class MonthFragment : BaseFragment{
     constructor(mainActivity: MainActivity){
         this.mainActivity = mainActivity
@@ -39,6 +44,7 @@ class MonthFragment : BaseFragment{
         initView()
     }
     fun reloadView(){
+        //다시 adapter를 설정하는 것보다는 item만 바꿔주고, adapter.notifyDataSetChanged 이거를 호출해 주는게 좋아~
         scheduleRecyclerViewAdapter = MonthRecyclerAdapter(this, today_db)
         rv_schedule.adapter = scheduleRecyclerViewAdapter
     }

@@ -14,4 +14,4 @@ data class Todo(
     var id: Int = 0
 }
 
-
+//id도 위에 선언하는게 좋을 것 같은데~

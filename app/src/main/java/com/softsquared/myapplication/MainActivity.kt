@@ -8,6 +8,7 @@ import com.softsquared.myapplication.month.MonthFragment
 import com.softsquared.myapplication.today.TodayFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
+//뭔가 코드 정리할수 있을 것 같은데 한번 해보고 다음에 같이 보자! !!, ? 이런걸 조금 줄일 방법도 찾아보고
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
     var todayFragment : TodayFragment? = null

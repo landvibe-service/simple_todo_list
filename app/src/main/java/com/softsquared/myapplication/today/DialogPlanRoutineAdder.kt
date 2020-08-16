@@ -7,10 +7,8 @@ import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.Window
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
+import android.widget.Toast.LENGTH_SHORT
 import com.softsquared.myapplication.MainActivity
 import com.softsquared.myapplication.R
 import java.text.DateFormat
@@ -20,6 +18,7 @@ import kotlin.collections.ArrayList
 
 class DialogPlanRoutineAdder(context: Context, activity: Activity, cal: Calendar) {
     private val dlg = Dialog(context)
+    val context = context
     private lateinit var btnOK: Button
     private lateinit var btnCancel: Button
     lateinit var et_dialog_start_date: EditText
@@ -179,45 +178,62 @@ class DialogPlanRoutineAdder(context: Context, activity: Activity, cal: Calendar
             val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
             var start_day = et_dialog_start_date.text.toString()
             var end_day = et_dialog_end_date.text.toString()
-            Log.e("start_day ", start_day )
-            Log.e("end_day", end_day)
-            cal.set(Calendar.YEAR, start_day.subSequence(0, 4).toString().toInt())
-            cal.set(Calendar.MONTH, start_day.subSequence(5, 7).toString().toInt() - 1)
-            cal.set(Calendar.DAY_OF_MONTH, start_day.subSequence(8, 10).toString().toInt())
 
-            while(true) {
-                Log.e("후보 날짜", df.format(cal.time).toString())
-                if(df.format(cal.time).toString() <= end_day){
-                    Log.e("맞는 조건의 날짜", df.format(cal.time).toString())
-                    if(check_arr[cal.get(Calendar.DAY_OF_WEEK) - 1]){
-                        Log.e("진짜로 맞는 조건의 날짜", df.format(cal.time).toString())
-                    }else{
-                        cal.add(Calendar.DATE, +1)
-                        continue
-                    }
-                    val year = cal.get(Calendar.YEAR)
-                    val month = cal.get(Calendar.MONTH) + 1
-                    val day = cal.get(Calendar.DAY_OF_MONTH)
-                    var add_now = year.toString() + "-"
-                    if(month < 10){
-                        add_now += "0"
-                    }
-                    add_now += (month.toString() + "-")
-                    if(day < 10){
-                        add_now += "0"
-                    }
-                    add_now += day.toString()
-                    arr.add(add_now)
-                    cal.add(Calendar.DATE, +1)
-                }else{
-                    Log.e("맞는 조건의 날짜", "없음")
+            var flag = false
+
+            for(i in check_arr){
+                if(i){
+                    flag = i
                     break
                 }
             }
 
+            if(start_day.isEmpty()){
+                Toast.makeText(context, "시작 날짜를 입력하세요.", LENGTH_SHORT).show()
+            }else if(end_day.isEmpty()){
+                Toast.makeText(context, "끝나는 날짜를 입력하세요.", LENGTH_SHORT).show()
+            }else if(start_day > end_day){
+                Toast.makeText(context, "끝나는 날을 시작하는 날 이후로 설정해 주세요.", LENGTH_SHORT).show()
+            }else if(!flag){
+                Toast.makeText(context, "반복할 요일을 설정해 주세요.", LENGTH_SHORT).show()
+            }
+            else{
+                cal.set(Calendar.YEAR, start_day.subSequence(0, 4).toString().toInt())
+                cal.set(Calendar.MONTH, start_day.subSequence(5, 7).toString().toInt() - 1)
+                cal.set(Calendar.DAY_OF_MONTH, start_day.subSequence(8, 10).toString().toInt())
 
-            cal.time = Date()
-            dlg.dismiss()
+                while(true) {
+                    Log.e("후보 날짜", df.format(cal.time).toString())
+                    if(df.format(cal.time).toString() <= end_day){
+                        Log.e("맞는 조건의 날짜", df.format(cal.time).toString())
+                        if(check_arr[cal.get(Calendar.DAY_OF_WEEK) - 1]){
+                            Log.e("진짜로 맞는 조건의 날짜", df.format(cal.time).toString())
+                        }else{
+                            cal.add(Calendar.DATE, +1)
+                            continue
+                        }
+                        val year = cal.get(Calendar.YEAR)
+                        val month = cal.get(Calendar.MONTH) + 1
+                        val day = cal.get(Calendar.DAY_OF_MONTH)
+                        var add_now = year.toString() + "-"
+                        if(month < 10){
+                            add_now += "0"
+                        }
+                        add_now += (month.toString() + "-")
+                        if(day < 10){
+                            add_now += "0"
+                        }
+                        add_now += day.toString()
+                        arr.add(add_now)
+                        cal.add(Calendar.DATE, +1)
+                    }else{
+                        Log.e("맞는 조건의 날짜", "없음")
+                        break
+                    }
+                }
+                cal.time = Date()
+                dlg.dismiss()
+            }
         }
 
         btnCancel.setOnClickListener {

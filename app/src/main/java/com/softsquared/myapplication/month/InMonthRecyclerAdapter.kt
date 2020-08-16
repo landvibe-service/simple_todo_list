@@ -28,13 +28,14 @@ class InMonthRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        //?가 필요없어 보이는데~
         holder?.bind(items[position], context)
         holder.itemView.setOnClickListener {
-            Log.e("현재 날짜", curDate)
             monthFragment.mainActivity.reloadTodayFragment(TodayFragment(curDate))
         }
     }
 
+    //!!는 안쓰는게 좋아~
     inner class ViewHolder(itemView: View?) :
         RecyclerView.ViewHolder(itemView!!) {
         val contents = itemView?.findViewById<TextView>(R.id.tv_contents_in_cal)

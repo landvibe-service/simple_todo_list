@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="날짜"
+            android:text="타입"
             android:fontFamily="@font/nanumbarungothic"
             android:layout_marginRight="15dp"
             />
@@ -79,6 +79,30 @@
                 android:layout_height="wrap_content"
                 android:text="반복설정"/>
         </LinearLayout>
-
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="날짜"
+            android:fontFamily="@font/nanumbarungothic"
+            />
+        <EditText
+            android:id="@+id/et_dialog_sel_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:ems="10"
+            android:hint="텍스트를 입력해주세요."
+            android:inputType="textPersonName"
+            android:clickable="false"
+            android:focusable="false"
+            />
     </LinearLayout>
 </LinearLayout>

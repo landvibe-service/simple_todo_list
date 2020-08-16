@@ -1,11 +1,13 @@
 package com.softsquared.myapplication.today
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
+import android.widget.*
+import android.widget.Toast.LENGTH_LONG
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
@@ -25,9 +27,8 @@ class TodayRecyclerAdapter(
     RecyclerView.Adapter<TodayRecyclerAdapter.ViewHolder>() {
 
     override fun getItemCount() = items.size
-    fun removeItem(position: Int) {
+    fun removeItem(position: Int, today_db: AppDatabase) {
         val del = items.get(position)
-        var today_db = AppDatabase.getInstance(context)
         if (today_db != null) {
             today_db.todoDao().delete(del)
         }
@@ -39,7 +40,6 @@ class TodayRecyclerAdapter(
     fun modifyItem(position: Int){
         val mod = items.get(position)
         var today_db = AppDatabase.getInstance(context)
-
         if (today_db != null) {
             todayFragment.showAlertDialog(today_db, 2, mod)
         }
@@ -58,7 +58,29 @@ class TodayRecyclerAdapter(
         val btn_del = holder?.btn_del
         if (btn_del != null) {
             btn_del.setOnClickListener {
-                removeItem(position)
+            val today_db = AppDatabase.getInstance(context)
+                if(today_db?.todoDao()?.getMyGroupSize(items.get(position).gid)!! > 1){
+                    val builder = AlertDialog.Builder(context)
+                    val dialogView = todayFragment.layoutInflater.inflate(R.layout.dialog_del_type, null)
+                    val rbtn_type_one = dialogView.findViewById<RadioButton>(R.id.rbtn_type_one)
+                    val rbtn_type_multi = dialogView.findViewById<RadioButton>(R.id.rbtn_type_multi)
+
+                    builder.setView(dialogView)
+                        .setPositiveButton("확인") { dialogInterface, i ->
+                            if(rbtn_type_one.isChecked()){
+                                removeItem(position, today_db)
+                            }else{
+                                today_db.todoDao().removeGroup(items.get(position).gid)
+                                items.remove(items.get(position))
+                                notifyDataSetChanged()
+                            }
+                        }
+                        .setNegativeButton("취소") { dialogInterface, i ->
+                        }
+                        .show()
+                }else{
+                    removeItem(position, today_db)
+                }
             }
         }
         val btn_modify = holder?.btn_modify
