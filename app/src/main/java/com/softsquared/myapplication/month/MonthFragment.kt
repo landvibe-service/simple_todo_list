@@ -30,8 +30,6 @@ class MonthFragment : BaseFragment{
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-
-
     ): View? {
         var view = inflater.inflate(R.layout.fragment_month, container, false)
         today_db = AppDatabase.getInstance(activity!!)!!
@@ -40,7 +38,7 @@ class MonthFragment : BaseFragment{
 
     override fun onResume() {
         super.onResume()
-        Log.e("resumed", "resumed")
+        Log.e("test", "git Test")
         initView()
     }
     fun reloadView(){
