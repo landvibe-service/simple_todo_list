@@ -75,10 +75,20 @@
             android:layout_marginRight="20dp"
             />
     </Toolbar>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_today_list"
+    <LinearLayout
+        android:id="@+id/ll_swiper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_today_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+    </LinearLayout>
+
+
+
 </LinearLayout>

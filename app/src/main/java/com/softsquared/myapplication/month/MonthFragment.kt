@@ -24,6 +24,7 @@ class MonthFragment : BaseFragment{
     constructor(mainActivity: MainActivity){
         this.mainActivity = mainActivity
     }
+
     val mainActivity: MainActivity
     lateinit var scheduleRecyclerViewAdapter: MonthRecyclerAdapter
     lateinit var today_db: AppDatabase

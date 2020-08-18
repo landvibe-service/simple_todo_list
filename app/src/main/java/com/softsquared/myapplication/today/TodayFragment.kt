@@ -3,15 +3,13 @@ package com.softsquared.myapplication.today
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.softsquared.myapplication.BaseFragment
 import com.softsquared.myapplication.R
 import com.softsquared.myapplication.db.AppDatabase
 import com.softsquared.myapplication.db.Todo
@@ -22,9 +20,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TodayFragment : BaseFragment {
+class TodayFragment : Fragment {
     lateinit var todayRecyclerView: RecyclerView
     lateinit var set_arr: ArrayList<String>
+    lateinit var today_db: AppDatabase
     var list = ArrayList<Todo>()
     var cal = Calendar.getInstance()
     val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -47,7 +46,7 @@ class TodayFragment : BaseFragment {
         Log.e("cal time", df.format(cal.time))
     }
 
-    fun loadView(new_cal: Calendar, today_db: AppDatabase) {
+    fun loadView(new_cal: Calendar) {
         tv_toolbar.setText(df.format(new_cal.time))
         today_date = df.format(new_cal.time)
         tv_fragment_today_day.setText(arr_day[new_cal.get(Calendar.DAY_OF_WEEK) - 1])
@@ -67,12 +66,13 @@ class TodayFragment : BaseFragment {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-        val today_db: AppDatabase? =
-            AppDatabase.getInstance(activity!!)
+        today_db = AppDatabase.getInstance(activity!!)!!
         val rootView = inflater.inflate(R.layout.fragment_today, container, false)
         val tv_toolbar = rootView.findViewById<TextView>(R.id.tv_toolbar)
+        val ll_swiper = rootView.findViewById<LinearLayout>(R.id.ll_swiper)
+        var onSwipeTouchListener = OnSwipeTouchListener()
+        ll_swiper.setOnTouchListener(onSwipeTouchListener)
+
 
         tv_fragment_today_day = rootView.findViewById<TextView>(R.id.tv_fragment_today_day)
         todayRecyclerView = rootView.findViewById(R.id.rv_today_list)
@@ -94,22 +94,21 @@ class TodayFragment : BaseFragment {
 
         rootView.findViewById<ImageButton>(R.id.ibtn_prev_arrow).setOnClickListener {
             cal.add(Calendar.DATE, -1)
-
             if (today_db != null) {
-                loadView(cal, today_db)
+                loadView(cal)
             }
         }
         rootView.findViewById<ImageButton>(R.id.ibtn_next_arrow).setOnClickListener {
             cal.add(Calendar.DATE, +1)
             if (today_db != null) {
-                loadView(cal, today_db)
+                loadView(cal)
             }
         }
         rootView.findViewById<Button>(R.id.fragment_today_today_button).setOnClickListener {
             if (today_db != null) {
                 today_date = df.format(Date())
                 cal.time = Date()
-                loadView(cal, today_db)
+                loadView(cal)
             }
         }
 
@@ -317,6 +316,77 @@ class TodayFragment : BaseFragment {
             cal.set(Calendar.MONTH, selected_date.subSequence(5, 7).toString().toInt() - 1)
             cal.set(Calendar.DAY_OF_MONTH, selected_date.subSequence(8, 10).toString().toInt())
             tv_toolbar.setText(selected_date)
+        }
+    }
+
+    inner class OnSwipeTouchListener : View.OnTouchListener {
+
+        private val gestureDetector = GestureDetector(GestureListener())
+
+        fun onTouch(event: MotionEvent): Boolean {
+            return gestureDetector.onTouchEvent(event)
+        }
+
+        private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
+
+            private val SWIPE_THRESHOLD = 100
+            private val SWIPE_VELOCITY_THRESHOLD = 100
+
+            override fun onDown(e: MotionEvent): Boolean {
+                return true
+            }
+
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                onTouch(e)
+                return true
+            }
+
+
+            override fun onFling(
+                e1: MotionEvent,
+                e2: MotionEvent,
+                velocityX: Float,
+                velocityY: Float
+            ): Boolean {
+                val result = false
+                try {
+                    val diffY = e2.y - e1.y
+                    val diffX = e2.x - e1.x
+                    if (Math.abs(diffX) > Math.abs(diffY)) {
+                        if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                            if (diffX > 0) {
+                                onSwipeRight()
+                            } else {
+                                onSwipeLeft()
+                            }
+                        }
+                    } else {
+                        // onTouch(e);
+                    }
+                } catch (exception: Exception) {
+                    exception.printStackTrace()
+                }
+
+                return result
+            }
+        }
+
+        override fun onTouch(v: View, event: MotionEvent): Boolean {
+            return gestureDetector.onTouchEvent(event)
+        }
+
+        open fun onSwipeRight() {
+            cal.add(Calendar.DATE, -1)
+            if (today_db != null) {
+                loadView(cal)
+            }
+        }
+
+        open fun onSwipeLeft() {
+            cal.add(Calendar.DATE, +1)
+            if (AppDatabase.getInstance(activity!!) != null) {
+                today_db?.let { loadView(cal) }
+            }
         }
     }
 }
