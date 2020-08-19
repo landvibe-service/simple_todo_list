@@ -25,7 +25,6 @@ class DialogPlanMultiAdder(context: Context) {
     private val dlg = Dialog(context)
     private lateinit var btnOK: Button
     private lateinit var btnCancel: Button
-    private lateinit var rv_dialog_calendar: RecyclerView
     private lateinit var tv_dialog_current_month: TextView
     lateinit var scheduleRecyclerViewAdapter: DialogRecyclerAdapter
     lateinit var ibtn_dialog_prev: ImageButton
@@ -43,7 +42,7 @@ class DialogPlanMultiAdder(context: Context) {
         //아래처럼 쓸수 있을거같아 선언안하고
         //dlg.rv_dialog_calendar
 //>>>>>>> 77fe710d59baa4970ee4bf17366766c8e22a717c:app/src/main/java/com/softsquared/myapplication/today/DialogPlanAdder.kt
-        rv_dialog_calendar = dlg.findViewById(R.id.rv_dialog_calendar)
+//        rv_dialog_calendar = dlg.findViewById(R.id.rv_dialog_calendar)
         btnOK = dlg.findViewById(R.id.btn_dialog_calendar_ok)
         btnCancel = dlg.findViewById(R.id.btn_dialog_calendar_cancle)
         tv_dialog_current_month = dlg.findViewById(R.id.tv_dialog_current_month)
@@ -72,8 +71,8 @@ class DialogPlanMultiAdder(context: Context) {
 
     fun initView() {
         scheduleRecyclerViewAdapter = DialogRecyclerAdapter(this, set_data)
-        rv_dialog_calendar.layoutManager = GridLayoutManager(context, BaseCalendar.DAYS_OF_WEEK)
-        rv_dialog_calendar.adapter = scheduleRecyclerViewAdapter
+        dlg.rv_dialog_calendar.layoutManager = GridLayoutManager(context, BaseCalendar.DAYS_OF_WEEK)
+        dlg.rv_dialog_calendar.adapter = scheduleRecyclerViewAdapter
         ibtn_dialog_prev.setOnClickListener {
             scheduleRecyclerViewAdapter.changeToPrevMonth()
         }

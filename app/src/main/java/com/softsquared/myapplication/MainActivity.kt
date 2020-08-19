@@ -18,9 +18,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        transaction.add(R.id.main_frame_layout, todayFragment)
-//        transaction.add(R.id.main_frame_layout, weekFragment)
-//        transaction.add(R.id.main_frame_layout, monthFragment)
 
         bn_bottom_navigation_view.setOnNavigationItemSelectedListener(
             mOnNavigationItemSelectedListener
@@ -40,11 +37,9 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.bni_today -> {
                     if(todayFragment != null){
-                        Log.e("todayFragment", "is not null")
                         transaction = supportFragmentManager.beginTransaction()
                         transaction.show(todayFragment!!).commit()
                     }else{
-                        Log.e("todayFragment", "is null")
                         todayFragment = TodayFragment()
                         transaction.add(R.id.main_frame_layout, todayFragment!!)
                         transaction.show(todayFragment!!).commit()

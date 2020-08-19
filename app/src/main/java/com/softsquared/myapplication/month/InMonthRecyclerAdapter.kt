@@ -22,19 +22,15 @@ class InMonthRecyclerAdapter(
             .inflate(R.layout.item_schedule_in_cal, parent, false)
         return ViewHolder(inflatedView)
     }
-
     override fun getItemCount(): Int {
         return items.size
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        //?가 필요없어 보이는데~
-        holder?.bind(items[position], context)
+        holder.bind(items[position], context)
         holder.itemView.setOnClickListener {
             monthFragment.mainActivity.reloadTodayFragment(TodayFragment(curDate))
         }
     }
-
     //!!는 안쓰는게 좋아~
     inner class ViewHolder(itemView: View?) :
         RecyclerView.ViewHolder(itemView!!) {

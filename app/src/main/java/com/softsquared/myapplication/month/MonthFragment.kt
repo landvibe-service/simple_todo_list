@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.softsquared.myapplication.BaseFragment
@@ -24,7 +25,7 @@ class MonthFragment : BaseFragment{
     constructor(mainActivity: MainActivity){
         this.mainActivity = mainActivity
     }
-
+    lateinit var monthRecyclerAdapter: MonthRecyclerAdapter
     val mainActivity: MainActivity
     lateinit var scheduleRecyclerViewAdapter: MonthRecyclerAdapter
     lateinit var today_db: AppDatabase
@@ -36,7 +37,12 @@ class MonthFragment : BaseFragment{
         today_db = AppDatabase.getInstance(activity!!)!!
         return view
     }
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fragment_month_today_button.setOnClickListener {
+            initView()
+        }
+    }
     override fun onResume() {
         super.onResume()
         Log.e("test", "git Test")
@@ -44,8 +50,7 @@ class MonthFragment : BaseFragment{
     }
     fun reloadView(){
         //다시 adapter를 설정하는 것보다는 item만 바꿔주고, adapter.notifyDataSetChanged 이거를 호출해 주는게 좋아~
-        scheduleRecyclerViewAdapter = MonthRecyclerAdapter(this, today_db)
-        rv_schedule.adapter = scheduleRecyclerViewAdapter
+        rv_schedule.adapter?.notifyDataSetChanged()
     }
     fun initView() {
         scheduleRecyclerViewAdapter = MonthRecyclerAdapter(this, today_db)

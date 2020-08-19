@@ -1,12 +1,12 @@
 package com.softsquared.myapplication.today
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import android.widget.Toast.LENGTH_LONG
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.RadioButton
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
@@ -23,6 +23,7 @@ class TodayRecyclerAdapter(
     var items: ArrayList<Todo>,
     val viewBinderHelper: ViewBinderHelper = ViewBinderHelper(),
     val itemClick: (Todo) -> Unit
+
 ) :
     RecyclerView.Adapter<TodayRecyclerAdapter.ViewHolder>() {
 
@@ -91,10 +92,10 @@ class TodayRecyclerAdapter(
 
         holder.itemView.tv_contents.setOnClickListener {
             var today_db = AppDatabase.getInstance(context)
-            items[position].clear = !items[position].clear
-            today_db?.todoDao()?.update(items[position])
-        }
 
+                items[position].clear = !items[position].clear
+                today_db?.todoDao()?.update(items[position])
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
