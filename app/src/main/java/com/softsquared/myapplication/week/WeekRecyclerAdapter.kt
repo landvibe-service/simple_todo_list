@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.myapplication.MainViewModel
@@ -110,7 +111,10 @@ class WeekRecyclerAdapter(weekFragment: WeekFragment, viewModel: MainViewModel) 
             cur = cur + "-" + curDate
         }
         if (cur.equals(LocalDate.now().toString())) {
+            holder.itemView.tv_today_marker.isVisible = true
             holder.itemView.tv_today_marker.text = "Today!"
+        }else{
+            holder.itemView.tv_today_marker.isVisible = false
         }
         holder.itemView.tv_date.text = baseCalendar.data[position].toString()
 
