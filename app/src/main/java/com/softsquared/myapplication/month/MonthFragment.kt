@@ -45,7 +45,6 @@ class MonthFragment : BaseFragment{
     }
     override fun onResume() {
         super.onResume()
-        Log.e("test", "git Test")
         initView()
     }
     fun reloadView(){
@@ -69,7 +68,6 @@ class MonthFragment : BaseFragment{
     fun refreshCurrentMonth(calendar: Calendar) : String{
         val sdf = SimpleDateFormat("yyyy-MM", Locale.KOREAN)
         tv_current_month.text = sdf.format(calendar.time)
-        Log.e("refreshCurrentMonth", tv_current_month.text.toString())
         return tv_current_month.text.toString()
     }
 }

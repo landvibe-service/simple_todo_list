@@ -2,9 +2,11 @@ package com.softsquared.myapplication.today
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.*
+import android.widget.Button
+import android.widget.DatePicker
+import android.widget.EditText
+import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -266,14 +268,10 @@ class TodayFragment : Fragment {
             }
 //            this@TodayFragment.onResume()
         }
-
-
-
         tv_toolbar.setText(todo.day)
         cal.set(Calendar.YEAR, todo.day.subSequence(0, 4).toString().toInt())
         cal.set(Calendar.MONTH, todo.day.subSequence(5, 7).toString().toInt() - 1)
         cal.set(Calendar.DAY_OF_MONTH, todo.day.subSequence(8, 10).toString().toInt())
-
     }
 
     fun insertTodoData(
@@ -288,19 +286,15 @@ class TodayFragment : Fragment {
         val dialogText = dialogView.findViewById<EditText>(R.id.et_dialog_contents)
         var selected_date = date_arr.get(0)
         if (today_db != null) {
-            // 비동기 처리, resume시켜주지 않으면 즉시반영되지 않음.
-            lifecycleScope.launch(Dispatchers.IO){
-                for (i in date_arr) {
-                    today_db.todoDao().insert(
-                        Todo(
-                            dialogText.text.toString(),
-                            false,
-                            i,
-                            gid
-                        )
+            for (i in date_arr) {
+                today_db.todoDao().insert(
+                    Todo(
+                        dialogText.text.toString(),
+                        false,
+                        i,
+                        gid
                     )
-                }
-                this@TodayFragment.onResume()
+                )
             }
             cal.set(Calendar.YEAR, selected_date.subSequence(0, 4).toString().toInt())
             cal.set(Calendar.MONTH, selected_date.subSequence(5, 7).toString().toInt() - 1)

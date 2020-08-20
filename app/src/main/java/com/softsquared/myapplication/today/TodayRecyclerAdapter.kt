@@ -92,7 +92,6 @@ class TodayRecyclerAdapter(
 
         holder.itemView.tv_contents.setOnClickListener {
             var today_db = AppDatabase.getInstance(context)
-
                 items[position].clear = !items[position].clear
                 today_db?.todoDao()?.update(items[position])
         }
