@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.softsquared.myapplication.MainViewModel
 import com.softsquared.myapplication.R
-import com.softsquared.myapplication.db.AppDatabase
 import com.softsquared.myapplication.today.TodayFragment
 import kotlinx.android.synthetic.main.item_schedule.view.*
 import java.text.SimpleDateFormat
@@ -17,7 +17,7 @@ import java.util.*
 
 
 //fragment랑 adapter가 구조가 약간 꼬여있는 것 같아~ adapter에서 fragment를 가질 수 밖에 없는 지금 그런 구존데 구조를 정리해봐바 한번 ㅎㅎ
-class MonthRecyclerAdapter(val monthFragment: MonthFragment, val todayDB: AppDatabase) :
+class MonthRecyclerAdapter(val monthFragment: MonthFragment, val viewModel: MainViewModel) :
     RecyclerView.Adapter<ViewHolderHelper>() {
     val baseCalendar = BaseCalendar()
     lateinit var curYearMonth: String
@@ -80,7 +80,7 @@ class MonthRecyclerAdapter(val monthFragment: MonthFragment, val todayDB: AppDat
 
         var inMonthRecyclerAdapter = InMonthRecyclerAdapter(
             monthFragment.activity!!,
-            ArrayList(todayDB.todoDao().getDayList(cur)),
+            ArrayList(viewModel.getDayList(cur)),
             cur,
             monthFragment
         )

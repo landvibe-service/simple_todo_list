@@ -59,7 +59,6 @@
             android:button="@drawable/selector"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:text=" 똥싸기"
             android:textColor="@color/black"
             android:padding="5dp"
             />

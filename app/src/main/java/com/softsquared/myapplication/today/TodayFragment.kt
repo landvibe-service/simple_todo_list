@@ -10,10 +10,11 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.softsquared.myapplication.MainViewModel
 import com.softsquared.myapplication.R
-import com.softsquared.myapplication.db.AppDatabase
 import com.softsquared.myapplication.db.Todo
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_today.*
@@ -26,86 +27,80 @@ import kotlin.collections.ArrayList
 
 class TodayFragment : Fragment {
     lateinit var set_arr: ArrayList<String>
-    lateinit var today_db: AppDatabase
     val todayFragment = this
     var list = ArrayList<Todo>()
     var cal = Calendar.getInstance()
     val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
     var today_date: String
+    lateinit var viewModel: MainViewModel
     val arr_day = listOf("일", "월", "화", "수", "목", "금", "토")
+
     constructor() {
         today_date = df.format(cal.time)
         cal.time = Date()
     }
+
     constructor(curDay: String) {
         today_date = curDay
         cal.set(Calendar.YEAR, curDay.subSequence(0, 4).toString().toInt())
         cal.set(Calendar.MONTH, curDay.subSequence(5, 7).toString().toInt() - 1)
         cal.set(Calendar.DAY_OF_MONTH, curDay.subSequence(8, 10).toString().toInt())
     }
+
     fun loadView(new_cal: Calendar) {
         tv_toolbar.setText(df.format(new_cal.time))
         today_date = df.format(new_cal.time)
         tv_fragment_today_day.setText(arr_day[new_cal.get(Calendar.DAY_OF_WEEK) - 1])
-        if (today_db != null) {
-            rv_today_list.adapter = TodayRecyclerAdapter(
-                activity!!,
-                this,
-                today_date,
-                ArrayList(today_db.todoDao().getDayList(df.format(new_cal.time)))
-            ) { item ->
-            }
+
+        rv_today_list.adapter = TodayRecyclerAdapter(
+            activity!!,
+            this,
+            today_date,
+            ArrayList(viewModel.getDayList(df.format(new_cal.time))),
+            viewModel = viewModel
+        ) { item ->
         }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        today_db = AppDatabase.getInstance(activity!!)!!
         val rootView = inflater.inflate(R.layout.fragment_today, container, false)
         return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProviders.of(this)[MainViewModel::class.java]
         tv_toolbar.setText(today_date)
         ll_swiper.setOnTouchListener(OnSwipeTouchListener())
         tv_fragment_today_day.setText(arr_day[cal.get(Calendar.DAY_OF_WEEK) - 1])
         ibtn_prev_arrow.setOnClickListener {
             cal.add(Calendar.DATE, -1)
-            if (today_db != null) {
-                loadView(cal)
-            }
+            loadView(cal)
         }
         ibtn_next_arrow.setOnClickListener {
             cal.add(Calendar.DATE, +1)
-            if (today_db != null) {
-                loadView(cal)
-            }
+            loadView(cal)
         }
         fragment_today_today_button.setOnClickListener {
-            if (today_db != null) {
-                today_date = df.format(Date())
-                cal.time = Date()
-                loadView(cal)
-            }
+            today_date = df.format(Date())
+            cal.time = Date()
+            loadView(cal)
         }
         btn_add.setOnClickListener {
-            if (today_db != null) {
-                showAlertDialog(today_db, 1, Todo("-", false, "-", today_db.todoDao().getNewGid()))
-            }
+            showAlertDialog(1, Todo("-", false, "-", viewModel.getNewGid()))
         }
     }
 
     override fun onResume() {
         super.onResume()
         today_date = df.format(cal.time)
-        if (today_db != null) {
-            list = ArrayList(today_db.todoDao().getDayList(today_date))
-        }
+        list = ArrayList(viewModel.getDayList(today_date))
         val adapter =
-            TodayRecyclerAdapter(activity!!, this, today_date, list) { item ->
+            TodayRecyclerAdapter(activity!!, this, today_date, list, viewModel = viewModel) { item ->
             }
         rv_today_list.adapter = adapter
         adapter.notifyDataSetChanged()
@@ -113,7 +108,7 @@ class TodayFragment : Fragment {
         rv_today_list.layoutManager = lm
     }
 
-    fun showAlertDialog(today_db: AppDatabase, cmd: Int, todo: Todo) {
+    fun showAlertDialog(cmd: Int, todo: Todo) {
         lateinit var dialogView: View
         lateinit var dialogText: EditText
         lateinit var btn_dialog_single_choice: Button
@@ -185,9 +180,9 @@ class TodayFragment : Fragment {
                             if (set_arr.size == 0) {
                                 set_arr.add(today_date)
                             }
-                            insertTodoData(dialogView, today_db, set_arr, todo.gid)
+                            insertTodoData(dialogView, set_arr, todo.gid)
                         } else {
-                            updateTodoDate(dialogView, todo, today_db)
+                            updateTodoDate(dialogView, todo)
                         }
                     }
                 }
@@ -234,9 +229,9 @@ class TodayFragment : Fragment {
             builder.setView(dialogView)
                 .setPositiveButton("확인") { dialogInterface, i ->
                     if (cmd == 1) {
-                        insertTodoData(dialogView, today_db, set_arr, todo.gid)
+                        insertTodoData(dialogView, set_arr, todo.gid)
                     } else {
-                        updateTodoDate(dialogView, todo, today_db)
+                        updateTodoDate(dialogView, todo)
                     }
                 }
                 .setNegativeButton("취소") { dialogInterface, i ->
@@ -245,7 +240,7 @@ class TodayFragment : Fragment {
         }
     }
 
-    fun updateTodoDate(dialogView: View, todo: Todo, today_db: AppDatabase) {
+    fun updateTodoDate(dialogView: View, todo: Todo) {
         val dialogText = dialogView.findViewById<EditText>(R.id.et_dialog_contents)
         val dialogDate = dialogView.findViewById<EditText>(R.id.et_dialog_date)
 
@@ -253,20 +248,18 @@ class TodayFragment : Fragment {
         todo.day = dialogDate.text.toString()
 
         // 비동기 처리, 수정은 resume시켜주지 않아도 잘 작동.. 둘의 차이점을 찾으려 하다가 다른 작업을 먼저 하기로 일단은 정했습니다!
-        lifecycleScope.launch(Dispatchers.IO){
-            todo.gid = today_db.todoDao().getNewGid()
-            if (today_db != null) {
-                today_db.todoDao().update(todo)
-                rv_today_list.adapter =
-                    TodayRecyclerAdapter(
-                        activity!!,
-                        todayFragment,
-                        today_date,
-                        ArrayList(today_db.todoDao().getDayList(todo.day))
-                    ) { item ->
-                    }
-            }
-//            this@TodayFragment.onResume()
+        lifecycleScope.launch(Dispatchers.IO) {
+            todo.gid = viewModel.getNewGid()
+            viewModel.update(todo)
+            rv_today_list.adapter =
+                TodayRecyclerAdapter(
+                    activity!!,
+                    todayFragment,
+                    today_date,
+                    ArrayList(viewModel.getDayList(todo.day)),
+                    viewModel = viewModel
+                ) { item ->
+                }
         }
         tv_toolbar.setText(todo.day)
         cal.set(Calendar.YEAR, todo.day.subSequence(0, 4).toString().toInt())
@@ -276,7 +269,6 @@ class TodayFragment : Fragment {
 
     fun insertTodoData(
         dialogView: View,
-        today_db: AppDatabase,
         date_arr: ArrayList<String>,
         gid: Long
     ) {
@@ -285,22 +277,22 @@ class TodayFragment : Fragment {
         date_arr.sort()
         val dialogText = dialogView.findViewById<EditText>(R.id.et_dialog_contents)
         var selected_date = date_arr.get(0)
-        if (today_db != null) {
-            for (i in date_arr) {
-                today_db.todoDao().insert(
-                    Todo(
-                        dialogText.text.toString(),
-                        false,
-                        i,
-                        gid
-                    )
+        for (i in date_arr) {
+            viewModel.insert(
+                Todo(
+                    dialogText.text.toString(),
+                    false,
+                    i,
+                    gid
                 )
-            }
-            cal.set(Calendar.YEAR, selected_date.subSequence(0, 4).toString().toInt())
-            cal.set(Calendar.MONTH, selected_date.subSequence(5, 7).toString().toInt() - 1)
-            cal.set(Calendar.DAY_OF_MONTH, selected_date.subSequence(8, 10).toString().toInt())
-            tv_toolbar.setText(selected_date)
+            )
         }
+
+        cal.set(Calendar.YEAR, selected_date.subSequence(0, 4).toString().toInt())
+        cal.set(Calendar.MONTH, selected_date.subSequence(5, 7).toString().toInt() - 1)
+        cal.set(Calendar.DAY_OF_MONTH, selected_date.subSequence(8, 10).toString().toInt())
+        tv_toolbar.setText(selected_date)
+        loadView(cal)
     }
 
     inner class OnSwipeTouchListener : View.OnTouchListener {
@@ -317,10 +309,12 @@ class TodayFragment : Fragment {
             override fun onDown(e: MotionEvent): Boolean {
                 return true
             }
+
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 onTouch(e)
                 return true
             }
+
             override fun onFling(
                 e1: MotionEvent,
                 e2: MotionEvent,
@@ -355,16 +349,12 @@ class TodayFragment : Fragment {
 
         open fun onSwipeRight() {
             cal.add(Calendar.DATE, -1)
-            if (today_db != null) {
-                loadView(cal)
-            }
+            loadView(cal)
         }
 
         open fun onSwipeLeft() {
             cal.add(Calendar.DATE, +1)
-            if (AppDatabase.getInstance(activity!!) != null) {
-                today_db?.let { loadView(cal) }
-            }
+            loadView(cal)
         }
     }
 }

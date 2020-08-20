@@ -8,4 +8,5 @@
     <color name="transparent">#00000000</color>
     <color name="navigationBack">#5f58ff</color>
     <color name="trashBack">#ff683b</color>
+    <color name="cleared">#bbbbbb</color>
 </resources>

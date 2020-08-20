@@ -2,16 +2,13 @@ package com.softsquared.myapplication.week
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.softsquared.myapplication.MainViewModel
 import com.softsquared.myapplication.R
-import com.softsquared.myapplication.db.AppDatabase
 import com.softsquared.myapplication.month.BaseCalendar
 import com.softsquared.myapplication.month.InMonthRecyclerAdapter
 import com.softsquared.myapplication.month.ViewHolderHelper
@@ -23,13 +20,15 @@ import java.util.*
 
 
 //fragment랑 adapter가 구조가 약간 꼬여있는 것 같아~ adapter에서 fragment를 가질 수 밖에 없는 지금 그런 구존데 구조를 정리해봐바 한번 ㅎㅎ
-class WeekRecyclerAdapter(weekFragment: WeekFragment, todayDB: AppDatabase) :
+class WeekRecyclerAdapter(weekFragment: WeekFragment, viewModel: MainViewModel) :
     RecyclerView.Adapter<ViewHolderHelper>() {
     val weekFragment = weekFragment
     val baseCalendar = BaseCalendar()
-    val todayDB = todayDB
     lateinit var curYearMonth: String
-    val day_arr: ArrayList<String> = ArrayList(listOf("sun", "mon", "tue", "wed", "thu", "fri", "sat"))
+    val viewModel = viewModel
+    val day_arr: ArrayList<String> =
+        ArrayList(listOf("sun", "mon", "tue", "wed", "thu", "fri", "sat"))
+
     init {
         baseCalendar.initBaseCalendar {
             curYearMonth = refreshView(it)
@@ -48,7 +47,10 @@ class WeekRecyclerAdapter(weekFragment: WeekFragment, todayDB: AppDatabase) :
 
     @SuppressLint("NewApi", "ResourceAsColor")
     override fun onBindViewHolder(holder: ViewHolderHelper, position: Int) {
-        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         params.setMargins(0, 0, 0, 30)
 
         holder.itemView.layoutParams = params
@@ -64,8 +66,7 @@ class WeekRecyclerAdapter(weekFragment: WeekFragment, todayDB: AppDatabase) :
                     "#ff1200"
                 )
             )
-        }
-        else if(position % BaseCalendar.DAYS_OF_WEEK > 0 && position % BaseCalendar.DAYS_OF_WEEK < 6 ) {
+        } else if (position % BaseCalendar.DAYS_OF_WEEK > 0 && position % BaseCalendar.DAYS_OF_WEEK < 6) {
             holder.itemView.tv_date.setTextColor(
                 Color.parseColor(
                     "#676d6e"
@@ -76,8 +77,7 @@ class WeekRecyclerAdapter(weekFragment: WeekFragment, todayDB: AppDatabase) :
                     "#676d6e"
                 )
             )
-        }
-        else if(position % BaseCalendar.DAYS_OF_WEEK == 6) {
+        } else if (position % BaseCalendar.DAYS_OF_WEEK == 6) {
             holder.itemView.tv_date.setTextColor(
                 Color.parseColor(
                     "#0012f0"
@@ -93,30 +93,29 @@ class WeekRecyclerAdapter(weekFragment: WeekFragment, todayDB: AppDatabase) :
         val sdf = SimpleDateFormat("yyyy-MM", Locale.KOREA)
         var cur = sdf.format(baseCalendar.calendar.time)
         var curDate = baseCalendar.data[position].toString()
-        if(baseCalendar.data[position] < 10) {
-            curDate = "0"+curDate
+        if (baseCalendar.data[position] < 10) {
+            curDate = "0" + curDate
         }
         if (position < baseCalendar.prevMonthTailOffset) {
             holder.itemView.tv_date.alpha = 0.3f
             holder.itemView.tv_day.alpha = 0.3f
             cur = baseCalendar.getPrevMonth() + "-" + curDate
-        }else if(position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate){
+        } else if (position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
             holder.itemView.tv_date.alpha = 0.3f
             holder.itemView.tv_day.alpha = 0.3f
             cur = baseCalendar.getNextMonth() + "-" + curDate
-        }
-        else {
+        } else {
             holder.itemView.tv_date.alpha = 1f
             holder.itemView.tv_day.alpha = 1f
-            cur  = cur + "-" + curDate
+            cur = cur + "-" + curDate
         }
-        if(cur.equals(LocalDate.now().toString())){
+        if (cur.equals(LocalDate.now().toString())) {
             holder.itemView.tv_today_marker.text = "Today!"
         }
         holder.itemView.tv_date.text = baseCalendar.data[position].toString()
 
-        var dayArray = todayDB.todoDao().getDayList(cur)
-        if(dayArray.size == 0){
+        var dayArray = viewModel.getDayList(cur)
+        if (dayArray.size == 0) {
             holder.itemView.layoutParams.height = 100
         }
         var inMonthRecyclerAdapter = InMonthRecyclerAdapter(

@@ -1,6 +1,8 @@
 package com.softsquared.myapplication.today
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +13,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
+import com.softsquared.myapplication.MainViewModel
 import com.softsquared.myapplication.R
-import com.softsquared.myapplication.db.AppDatabase
 import com.softsquared.myapplication.db.Todo
 import kotlinx.android.synthetic.main.item_today.view.*
 
@@ -22,31 +24,27 @@ class TodayRecyclerAdapter(
     val curDate: String,
     var items: ArrayList<Todo>,
     val viewBinderHelper: ViewBinderHelper = ViewBinderHelper(),
+    val viewModel: MainViewModel,
     val itemClick: (Todo) -> Unit
-
 ) :
     RecyclerView.Adapter<TodayRecyclerAdapter.ViewHolder>() {
 
     override fun getItemCount() = items.size
-    fun removeItem(position: Int, today_db: AppDatabase) {
+    fun removeItem(position: Int) {
         val del = items.get(position)
-        if (today_db != null) {
-            today_db.todoDao().delete(del)
-        }
+        viewModel.delete(del)
         items.remove(del)
 
         notifyDataSetChanged()
     }
 
-    fun modifyItem(position: Int){
+    fun modifyItem(position: Int) {
         val mod = items.get(position)
-        var today_db = AppDatabase.getInstance(context)
-        if (today_db != null) {
-            todayFragment.showAlertDialog(today_db, 2, mod)
-        }
+        todayFragment.showAlertDialog(2, mod)
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NewApi")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         viewBinderHelper.setOpenOnlyOne(true)
         viewBinderHelper.bind(
@@ -59,19 +57,20 @@ class TodayRecyclerAdapter(
         val btn_del = holder?.btn_del
         if (btn_del != null) {
             btn_del.setOnClickListener {
-            val today_db = AppDatabase.getInstance(context)
-                if(today_db?.todoDao()?.getMyGroupSize(items.get(position).gid)!! > 1){
+
+                if (viewModel.getMyGroupSize(items.get(position).gid)!! > 1) {
                     val builder = AlertDialog.Builder(context)
-                    val dialogView = todayFragment.layoutInflater.inflate(R.layout.dialog_del_type, null)
+                    val dialogView =
+                        todayFragment.layoutInflater.inflate(R.layout.dialog_del_type, null)
                     val rbtn_type_one = dialogView.findViewById<RadioButton>(R.id.rbtn_type_one)
                     val rbtn_type_multi = dialogView.findViewById<RadioButton>(R.id.rbtn_type_multi)
 
                     builder.setView(dialogView)
                         .setPositiveButton("확인") { dialogInterface, i ->
-                            if(rbtn_type_one.isChecked()){
-                                removeItem(position, today_db)
-                            }else{
-                                today_db.todoDao().removeGroup(items.get(position).gid)
+                            if (rbtn_type_one.isChecked()) {
+                                removeItem(position)
+                            } else {
+                                viewModel.removeGroup(items.get(position).gid)
                                 items.remove(items.get(position))
                                 notifyDataSetChanged()
                             }
@@ -79,8 +78,8 @@ class TodayRecyclerAdapter(
                         .setNegativeButton("취소") { dialogInterface, i ->
                         }
                         .show()
-                }else{
-                    removeItem(position, today_db)
+                } else {
+                    removeItem(position)
                 }
             }
         }
@@ -90,10 +89,41 @@ class TodayRecyclerAdapter(
             modifyItem(position)
         }
 
+        if(items[position].clear){
+            holder.itemView.tv_contents.setTextColor(
+                Color.parseColor(
+                    "#bbbbbb"
+                )
+            )
+            holder.itemView.tv_contents.buttonTintList = context.getColorStateList(R.color.cleared)
+        }
+        else{
+            holder.itemView.tv_contents.setTextColor(
+                Color.parseColor(
+                    "#000000"
+                )
+            )
+            holder.itemView.tv_contents.buttonTintList = context.getColorStateList(R.color.black)
+        }
         holder.itemView.tv_contents.setOnClickListener {
-            var today_db = AppDatabase.getInstance(context)
-                items[position].clear = !items[position].clear
-                today_db?.todoDao()?.update(items[position])
+            items[position].clear = !items[position].clear
+            viewModel.update(items[position])
+            if(items[position].clear){
+                holder.itemView.tv_contents.setTextColor(
+                    Color.parseColor(
+                        "#bbbbbb"
+                    )
+                )
+                holder.itemView.tv_contents.buttonTintList = context.getColorStateList(R.color.cleared)
+            }
+            else{
+                holder.itemView.tv_contents.setTextColor(
+                    Color.parseColor(
+                        "#000000"
+                    )
+                )
+                holder.itemView.tv_contents.buttonTintList = context.getColorStateList(R.color.black)
+            }
         }
     }
 
@@ -101,9 +131,6 @@ class TodayRecyclerAdapter(
             ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_today, parent, false)
-
-
-
         return ViewHolder(inflatedView, itemClick)
     }
 
