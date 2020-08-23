@@ -2,6 +2,7 @@ package com.softsquared.myapplication.week
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -13,26 +14,25 @@ import com.softsquared.myapplication.R
 import com.softsquared.myapplication.month.BaseCalendar
 import com.softsquared.myapplication.month.InMonthRecyclerAdapter
 import com.softsquared.myapplication.month.ViewHolderHelper
-import com.softsquared.myapplication.today.TodayFragment
 import kotlinx.android.synthetic.main.item_schedule.view.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 
 
-//fragment랑 adapter가 구조가 약간 꼬여있는 것 같아~ adapter에서 fragment를 가질 수 밖에 없는 지금 그런 구존데 구조를 정리해봐바 한번 ㅎㅎ
-class WeekRecyclerAdapter(weekFragment: WeekFragment, viewModel: MainViewModel) :
+class WeekRecyclerAdapter(viewModel: MainViewModel) :
     RecyclerView.Adapter<ViewHolderHelper>() {
-    val weekFragment = weekFragment
-    val baseCalendar = BaseCalendar()
     lateinit var curYearMonth: String
     val viewModel = viewModel
+    val df = SimpleDateFormat("yyyy-mm-dd", Locale.KOREA)
+    val sdf = SimpleDateFormat("yyyy-MM", Locale.KOREA)
+    val baseCalendar = BaseCalendar()
     val day_arr: ArrayList<String> =
         ArrayList(listOf("sun", "mon", "tue", "wed", "thu", "fri", "sat"))
 
     init {
         baseCalendar.initBaseCalendar {
-            curYearMonth = refreshView(it)
+            curYearMonth = df.format(viewModel.getCalendar().time).toString()
         }
     }
 
@@ -54,8 +54,10 @@ class WeekRecyclerAdapter(weekFragment: WeekFragment, viewModel: MainViewModel) 
         )
         params.setMargins(0, 0, 0, 30)
 
+
         holder.itemView.layoutParams = params
-        holder.itemView.tv_day.text = day_arr[position % BaseCalendar.DAYS_OF_WEEK]
+        holder.itemView.tv_day.text = day_arr[(position % BaseCalendar.DAYS_OF_WEEK)]
+
         if (position % BaseCalendar.DAYS_OF_WEEK == 0) {
             holder.itemView.tv_date.setTextColor(
                 Color.parseColor(
@@ -91,7 +93,7 @@ class WeekRecyclerAdapter(weekFragment: WeekFragment, viewModel: MainViewModel) 
             )
         }
 
-        val sdf = SimpleDateFormat("yyyy-MM", Locale.KOREA)
+
         var cur = sdf.format(baseCalendar.calendar.time)
         var curDate = baseCalendar.data[position].toString()
         if (baseCalendar.data[position] < 10) {
@@ -113,44 +115,48 @@ class WeekRecyclerAdapter(weekFragment: WeekFragment, viewModel: MainViewModel) 
         if (cur.equals(LocalDate.now().toString())) {
             holder.itemView.tv_today_marker.isVisible = true
             holder.itemView.tv_today_marker.text = "Today!"
-        }else{
+        } else {
             holder.itemView.tv_today_marker.isVisible = false
         }
         holder.itemView.tv_date.text = baseCalendar.data[position].toString()
-
+        Log.e("cur, pos", "${cur +" "+day_arr[(position % BaseCalendar.DAYS_OF_WEEK)]}")
         var dayArray = viewModel.getDayList(cur)
+        //Log.e("dayArray", dayArray.toString())
         if (dayArray.size == 0) {
             holder.itemView.layoutParams.height = 100
         }
         var inMonthRecyclerAdapter = InMonthRecyclerAdapter(
-            weekFragment.activity!!,
-            ArrayList(dayArray),
+            ArrayList(dayArray ),
             cur,
-            weekFragment = this.weekFragment
+            viewModel = this.viewModel
         )
         holder.itemView.rv_item_contents.adapter = inMonthRecyclerAdapter
-        val lm = LinearLayoutManager(weekFragment.activity)
+        val lm = LinearLayoutManager(holder.containerView.context)
         holder.itemView.rv_item_contents.layoutManager = lm
 
         holder.itemView.setOnClickListener {
-            weekFragment.mainActivity.reloadTodayFragment(TodayFragment(cur))
+            viewModel.getCalendar().set(Calendar.YEAR, cur.subSequence(0, 4).toString().toInt())
+            viewModel.getCalendar()
+                .set(Calendar.MONTH, cur.subSequence(5, 7).toString().toInt() - 1)
+            viewModel.getCalendar()
+                .set(Calendar.DAY_OF_MONTH, cur.subSequence(8, 10).toString().toInt())
+            viewModel.getBottomNavigationView().selectedItemId = R.id.bni_today
         }
     }
 
     fun changeToPrevMonth() {
         baseCalendar.changeToPrevMonth {
-            curYearMonth = refreshView(it)
+            curYearMonth = df.format(it.time).toString()
         }
     }
-
+    fun changeToCurMonth() {
+        baseCalendar.changeToCurMonth {
+            curYearMonth = df.format(it.time).toString()
+        }
+    }
     fun changeToNextMonth() {
         baseCalendar.changeToNextMonth {
-            curYearMonth = refreshView(it)
+            curYearMonth = df.format(it.time).toString()
         }
-    }
-
-    private fun refreshView(calendar: Calendar): String {
-        notifyDataSetChanged()
-        return weekFragment.refreshCurrentWeek(calendar)
     }
 }

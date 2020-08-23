@@ -2,6 +2,7 @@ package com.softsquared.myapplication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.softsquared.myapplication.month.MonthFragment
 import com.softsquared.myapplication.today.TodayFragment
@@ -10,26 +11,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 //뭔가 코드 정리할수 있을 것 같은데 한번 해보고 다음에 같이 보자! !!, ? 이런걸 조금 줄일 방법도 찾아보고
 class MainActivity : AppCompatActivity() {
-    lateinit var bottomNavigationView: BottomNavigationView
     var todayFragment : TodayFragment? = null
     var weekFragment : WeekFragment? = null
     var monthFragment : MonthFragment? = null
     var transaction = supportFragmentManager.beginTransaction()
+    lateinit var viewModel :MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        bn_bottom_navigation_view.setOnNavigationItemSelectedListener(
+        viewModel = ViewModelProviders.of(this)[MainViewModel::class.java]
+        viewModel.setBottomNavigationView(bn_bottom_navigation_view)
+        viewModel.getBottomNavigationView().setOnNavigationItemSelectedListener(
             mOnNavigationItemSelectedListener
         )
-        bn_bottom_navigation_view.selectedItemId = R.id.bni_today
-    }
-    fun reloadTodayFragment(todayFragment: TodayFragment){
-        transaction = supportFragmentManager.beginTransaction()
-        this.todayFragment?.let { transaction.remove(it) }
-        this.todayFragment = todayFragment
-        transaction.add(R.id.main_frame_layout, this.todayFragment!!).commit()
-        bn_bottom_navigation_view.selectedItemId = R.id.bni_today
+        viewModel.getBottomNavigationView().selectedItemId = R.id.bni_today
     }
     private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
@@ -38,9 +33,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.bni_today -> {
                     if(todayFragment != null){
                         transaction = supportFragmentManager.beginTransaction()
+                        todayFragment?.loadView()
                         transaction.show(todayFragment!!).commit()
                     }else{
-                        todayFragment = TodayFragment()
+                        todayFragment = TodayFragment(viewModel)
                         transaction.add(R.id.main_frame_layout, todayFragment!!)
                         transaction.show(todayFragment!!).commit()
                     }
@@ -60,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                         weekFragment!!.reloadView()
                         transaction.show(weekFragment!!).commit()
                     }else{
-                        weekFragment = WeekFragment(this)
+                        weekFragment = WeekFragment(viewModel)
                         transaction.add(R.id.main_frame_layout, weekFragment!!)
                         transaction.show(weekFragment!!).commit()
                     }
@@ -80,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                         monthFragment!!.reloadView()
                         transaction.show(monthFragment!!).commit()
                     }else{
-                        monthFragment = MonthFragment(this)
+                        monthFragment = MonthFragment(viewModel)
                         transaction.add(R.id.main_frame_layout, monthFragment!!)
                         transaction.show(monthFragment!!).commit()
                     }

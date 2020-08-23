@@ -9,21 +9,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.myapplication.MainViewModel
 import com.softsquared.myapplication.R
-import com.softsquared.myapplication.today.TodayFragment
 import kotlinx.android.synthetic.main.item_schedule.view.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 
 
-//fragment랑 adapter가 구조가 약간 꼬여있는 것 같아~ adapter에서 fragment를 가질 수 밖에 없는 지금 그런 구존데 구조를 정리해봐바 한번 ㅎㅎ
-class MonthRecyclerAdapter(val monthFragment: MonthFragment, val viewModel: MainViewModel) :
+class MonthRecyclerAdapter(val viewModel: MainViewModel) :
     RecyclerView.Adapter<ViewHolderHelper>() {
+    val df = SimpleDateFormat("yyyy-mm-dd", Locale.KOREA)
     val baseCalendar = BaseCalendar()
     lateinit var curYearMonth: String
+
     init {
         baseCalendar.initBaseCalendar {
-            curYearMonth = refreshView(it)
+            curYearMonth = df.format(baseCalendar.calendar.time).toString()
         }
     }
 
@@ -44,7 +44,7 @@ class MonthRecyclerAdapter(val monthFragment: MonthFragment, val viewModel: Main
                 "#ff1200"
             )
         )
-        else if(position % BaseCalendar.DAYS_OF_WEEK == 6) holder.itemView.tv_date.setTextColor(
+        else if (position % BaseCalendar.DAYS_OF_WEEK == 6) holder.itemView.tv_date.setTextColor(
             Color.parseColor(
                 "#0012f0"
             )
@@ -55,23 +55,22 @@ class MonthRecyclerAdapter(val monthFragment: MonthFragment, val viewModel: Main
 
         var cur = sdf.format(baseCalendar.calendar.time)
         var curDate = baseCalendar.data[position].toString()
-        if(baseCalendar.data[position] < 10) {
-            curDate = "0"+curDate
+        if (baseCalendar.data[position] < 10) {
+            curDate = "0" + curDate
         }
         if (position < baseCalendar.prevMonthTailOffset) {
             holder.itemView.tv_date.alpha = 0.3f
             cur = baseCalendar.getPrevMonth() + "-" + curDate
-        }else if(position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate){
+        } else if (position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
             holder.itemView.tv_date.alpha = 0.3f
             cur = baseCalendar.getNextMonth() + "-" + curDate
-        }
-        else {
+        } else {
             holder.itemView.tv_date.alpha = 1f
-            cur  = cur + "-" + curDate
+            cur = cur + "-" + curDate
         }
         holder.itemView.tv_date.text = baseCalendar.data[position].toString()
 
-        if(cur.equals(LocalDate.now().toString())){
+        if (cur.equals(LocalDate.now().toString())) {
             holder.itemView.tv_today_marker.text = "Today!"
 
             holder.itemView.tv_date.isVisible = false
@@ -79,35 +78,40 @@ class MonthRecyclerAdapter(val monthFragment: MonthFragment, val viewModel: Main
         }
 
         var inMonthRecyclerAdapter = InMonthRecyclerAdapter(
-            monthFragment.activity!!,
             ArrayList(viewModel.getDayList(cur)),
             cur,
-            monthFragment
+            viewModel = this.viewModel
         )
 
         holder.itemView.rv_item_contents.adapter = inMonthRecyclerAdapter
-        val lm = LinearLayoutManager(monthFragment.activity)
+        val lm = LinearLayoutManager(holder.containerView.context)
         holder.itemView.rv_item_contents.layoutManager = lm
 
         holder.itemView.setOnClickListener {
-            monthFragment.mainActivity.reloadTodayFragment(TodayFragment(cur))
+            viewModel.getCalendar().set(Calendar.YEAR, cur.subSequence(0, 4).toString().toInt())
+            viewModel.getCalendar()
+                .set(Calendar.MONTH, cur.subSequence(5, 7).toString().toInt() - 1)
+            viewModel.getCalendar()
+                .set(Calendar.DAY_OF_MONTH, cur.subSequence(8, 10).toString().toInt())
+            viewModel.getBottomNavigationView().selectedItemId = R.id.bni_today
+        }
+    }
+
+    fun changeToCurMonth() {
+        baseCalendar.changeToCurMonth {
+            curYearMonth = df.format(baseCalendar.calendar.time).toString()
         }
     }
 
     fun changeToPrevMonth() {
         baseCalendar.changeToPrevMonth {
-            curYearMonth = refreshView(it)
+            curYearMonth = df.format(baseCalendar.calendar.time).toString()
         }
     }
 
     fun changeToNextMonth() {
         baseCalendar.changeToNextMonth {
-            curYearMonth = refreshView(it)
+            curYearMonth = df.format(baseCalendar.calendar.time).toString()
         }
-    }
-
-    private fun refreshView(calendar: Calendar): String {
-        notifyDataSetChanged()
-        return monthFragment.refreshCurrentMonth(calendar)
     }
 }

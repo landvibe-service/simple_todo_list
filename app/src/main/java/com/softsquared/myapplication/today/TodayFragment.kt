@@ -29,38 +29,31 @@ class TodayFragment : Fragment {
     lateinit var set_arr: ArrayList<String>
     val todayFragment = this
     var list = ArrayList<Todo>()
-    var cal = Calendar.getInstance()
+    val cal: Calendar
     val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
     var today_date: String
-    lateinit var viewModel: MainViewModel
     val arr_day = listOf("일", "월", "화", "수", "목", "금", "토")
-
-    constructor() {
+    val viewModel: MainViewModel
+    constructor(vm: MainViewModel) {
+        viewModel = vm
+        cal = viewModel.getCalendar()
         today_date = df.format(cal.time)
-        cal.time = Date()
+        //cal.time = Date()
     }
 
-    constructor(curDay: String) {
-        today_date = curDay
-        cal.set(Calendar.YEAR, curDay.subSequence(0, 4).toString().toInt())
-        cal.set(Calendar.MONTH, curDay.subSequence(5, 7).toString().toInt() - 1)
-        cal.set(Calendar.DAY_OF_MONTH, curDay.subSequence(8, 10).toString().toInt())
-    }
-
-    fun loadView(new_cal: Calendar) {
-        tv_toolbar.setText(df.format(new_cal.time))
-        today_date = df.format(new_cal.time)
-        tv_fragment_today_day.setText(arr_day[new_cal.get(Calendar.DAY_OF_WEEK) - 1])
+    fun loadView() {
+        tv_toolbar.setText(df.format(cal.time))
+        today_date = df.format(cal.time)
+        tv_fragment_today_day.setText(arr_day[cal.get(Calendar.DAY_OF_WEEK) - 1])
 
         rv_today_list.adapter = TodayRecyclerAdapter(
             activity!!,
             this,
             today_date,
-            ArrayList(viewModel.getDayList(df.format(new_cal.time))),
+            ArrayList(viewModel.getDayList(df.format(cal.time))),
             viewModel = viewModel
         ) { item ->
         }
-
     }
 
     override fun onCreateView(
@@ -73,22 +66,22 @@ class TodayFragment : Fragment {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this)[MainViewModel::class.java]
+        //viewModel = ViewModelProviders.of(this)[MainViewModel::class.java]
         tv_toolbar.setText(today_date)
         ll_swiper.setOnTouchListener(OnSwipeTouchListener())
         tv_fragment_today_day.setText(arr_day[cal.get(Calendar.DAY_OF_WEEK) - 1])
         ibtn_prev_arrow.setOnClickListener {
             cal.add(Calendar.DATE, -1)
-            loadView(cal)
+            loadView()
         }
         ibtn_next_arrow.setOnClickListener {
             cal.add(Calendar.DATE, +1)
-            loadView(cal)
+            loadView()
         }
         fragment_today_today_button.setOnClickListener {
             today_date = df.format(Date())
             cal.time = Date()
-            loadView(cal)
+            loadView()
         }
         btn_add.setOnClickListener {
             showAlertDialog(1, Todo("-", false, "-", viewModel.getNewGid()))
@@ -292,7 +285,7 @@ class TodayFragment : Fragment {
         cal.set(Calendar.MONTH, selected_date.subSequence(5, 7).toString().toInt() - 1)
         cal.set(Calendar.DAY_OF_MONTH, selected_date.subSequence(8, 10).toString().toInt())
         tv_toolbar.setText(selected_date)
-        loadView(cal)
+        loadView()
     }
 
     inner class OnSwipeTouchListener : View.OnTouchListener {
@@ -349,12 +342,12 @@ class TodayFragment : Fragment {
 
         open fun onSwipeRight() {
             cal.add(Calendar.DATE, -1)
-            loadView(cal)
+            loadView()
         }
 
         open fun onSwipeLeft() {
             cal.add(Calendar.DATE, +1)
-            loadView(cal)
+            loadView()
         }
     }
 }

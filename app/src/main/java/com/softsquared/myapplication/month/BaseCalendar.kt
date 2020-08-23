@@ -17,10 +17,10 @@ class BaseCalendar {
     }
 
     val calendar = Calendar.getInstance()
-
     var prevMonthTailOffset = 0
     var nextMonthHeadOffset = 0
     var currentMonthMaxDate = 0
+    val df = SimpleDateFormat("yyyy-mm-dd", Locale.KOREA)
 
     var data = arrayListOf<Int>()
 
@@ -39,6 +39,12 @@ class BaseCalendar {
     /**
      * Change to prev month.
      */
+    fun changeToCurMonth(refreshCallback: (Calendar) -> Unit){
+        calendar.time = Date()
+        makeMonthDate(refreshCallback)
+        calendar.time = Date()
+    }
+
     fun changeToPrevMonth(refreshCallback: (Calendar) -> Unit) {
         if(calendar.get(Calendar.MONTH) == 0){
             calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 1)
