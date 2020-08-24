@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:fontFamily="@font/nanumbarungothic"
+        android:fontFamily="@font/jungdong"
         android:id="@+id/dialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,10 +28,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="내용"
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             />
         <EditText
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/et_dialog_contents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="타입"
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:layout_marginRight="15dp"
             />
         <LinearLayout
@@ -60,7 +60,7 @@
             android:layout_marginRight="20dp"
             android:orientation="horizontal">
             <Button
-                android:fontFamily="@font/nanumbarungothic"
+                android:fontFamily="@font/jungdong"
                 android:id="@+id/btn_dialog_single_choice"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:text="단일선택"/>
             <Button
-                android:fontFamily="@font/nanumbarungothic"
+                android:fontFamily="@font/jungdong"
                 android:id="@+id/btn_dialog_multi_choice"
                 android:layout_width="0dp"
                 android:textSize="12dp"
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="다중선택"/>
             <Button
-                android:fontFamily="@font/nanumbarungothic"
+                android:fontFamily="@font/jungdong"
                 android:id="@+id/btn_dialog_set_routine"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -95,11 +95,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="날짜"
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:textSize="14dp"
             />
         <EditText
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/et_dialog_sel_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

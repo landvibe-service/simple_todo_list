@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:fontFamily="@font/nanumbarungothic"
+        android:fontFamily="@font/jungdong"
         android:id="@+id/dialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,10 +28,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="시작 날짜"
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             />
         <EditText
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/et_dialog_start_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,11 +53,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="종료 날짜"
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             />
 
         <EditText
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/et_dialog_end_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:fontFamily="@font/nanumbarungothic"
+                android:fontFamily="@font/jungdong"
                 android:id="@+id/tv_dialog_sun"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -97,7 +97,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:fontFamily="@font/nanumbarungothic"
+                android:fontFamily="@font/jungdong"
                 android:id="@+id/tv_dialog_mon"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -109,7 +109,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:fontFamily="@font/nanumbarungothic"
+                android:fontFamily="@font/jungdong"
                 android:id="@+id/tv_dialog_tue"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -121,7 +121,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:fontFamily="@font/nanumbarungothic"
+                android:fontFamily="@font/jungdong"
                 android:id="@+id/tv_dialog_wed"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -133,7 +133,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:fontFamily="@font/nanumbarungothic"
+                android:fontFamily="@font/jungdong"
                 android:id="@+id/tv_dialog_thu"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -145,7 +145,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:fontFamily="@font/nanumbarungothic"
+                android:fontFamily="@font/jungdong"
                 android:id="@+id/tv_dialog_fri"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -157,7 +157,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:fontFamily="@font/nanumbarungothic"
+                android:fontFamily="@font/jungdong"
                 android:id="@+id/tv_dialog_sat"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -176,7 +176,7 @@
         android:layout_marginBottom="5dp"
         >
         <Button
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/btn_dialog_routine_cancle"
             android:layout_width="0dp"
             android:layout_height="45dp"
@@ -187,7 +187,7 @@
             android:textSize="13dp"
             />
         <Button
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/btn_dialog_routine_ok"
             android:layout_width="0dp"
             android:layout_height="45dp"

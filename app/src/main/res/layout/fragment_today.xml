@@ -14,7 +14,7 @@
         android:elevation="2dp">
 
         <Button
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/fragment_today_today_button"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
 
             />
         <TextView
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/tv_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             android:textSize="14dp"
             />
         <TextView
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/tv_fragment_today_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
         android:orientation="vertical"
         >
         <TextView
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/tv_empty_today_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -6,7 +6,7 @@
     android:paddingLeft="20dp"
     >
     <TextView
-        android:fontFamily="@font/nanumbarungothic"
+        android:fontFamily="@font/jungdong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -20,7 +20,7 @@
         android:layout_marginBottom="5dp"
         >
         <RadioButton
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/rbtn_type_one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:checked="true"
             />
         <RadioButton
-            android:fontFamily="@font/nanumbarungothic"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/rbtn_type_multi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

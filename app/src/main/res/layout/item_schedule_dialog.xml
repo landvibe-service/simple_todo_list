@@ -7,7 +7,7 @@
     android:padding="5dp"
     >
     <TextView
-        android:fontFamily="@font/nanumbarungothic"
+        android:fontFamily="@font/jungdong"
         android:id="@+id/tv_date"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
