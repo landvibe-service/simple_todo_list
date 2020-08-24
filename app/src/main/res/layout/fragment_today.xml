@@ -14,11 +14,12 @@
         android:elevation="2dp">
 
         <Button
+            android:fontFamily="@font/nanumbarungothic"
             android:id="@+id/fragment_today_today_button"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="Today"
-            android:textSize="13dp"
+            android:textSize="12dp"
             android:layout_gravity="left"
             />
         <ImageButton
@@ -42,15 +43,17 @@
             android:text="@string/app_name"
             android:textColor="@color/black"
             android:layout_marginRight="5dp"
+            android:textSize="14dp"
             />
         <TextView
             android:fontFamily="@font/nanumbarungothic"
             android:id="@+id/tv_fragment_today_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="요"
+            android:text="day"
             android:textColor="@color/black"
             android:layout_gravity="center"
+            android:textSize="14dp"
             />
 
         <ImageButton
@@ -80,7 +83,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp"
+        android:orientation="vertical"
         >
+        <TextView
+            android:fontFamily="@font/nanumbarungothic"
+            android:id="@+id/tv_empty_today_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="등록된 일정이 없습니다."
+            android:textColor="#bbbbbb"
+            android:textAlignment="center"
+            android:textSize="16dp"
+            android:layout_marginTop="30dp"
+            android:visibility="visible"
+            />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_today_list"
             android:layout_width="match_parent"

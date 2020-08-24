@@ -89,15 +89,14 @@ class TodayRecyclerAdapter(
             modifyItem(position)
         }
 
-        if(items[position].clear){
+        if (items[position].clear) {
             holder.itemView.tv_contents.setTextColor(
                 Color.parseColor(
                     "#bbbbbb"
                 )
             )
             holder.itemView.tv_contents.buttonTintList = context.getColorStateList(R.color.cleared)
-        }
-        else{
+        } else {
             holder.itemView.tv_contents.setTextColor(
                 Color.parseColor(
                     "#000000"
@@ -108,21 +107,22 @@ class TodayRecyclerAdapter(
         holder.itemView.tv_contents.setOnClickListener {
             items[position].clear = !items[position].clear
             viewModel.update(items[position])
-            if(items[position].clear){
+            if (items[position].clear) {
                 holder.itemView.tv_contents.setTextColor(
                     Color.parseColor(
                         "#bbbbbb"
                     )
                 )
-                holder.itemView.tv_contents.buttonTintList = context.getColorStateList(R.color.cleared)
-            }
-            else{
+                holder.itemView.tv_contents.buttonTintList =
+                    context.getColorStateList(R.color.cleared)
+            } else {
                 holder.itemView.tv_contents.setTextColor(
                     Color.parseColor(
                         "#000000"
                     )
                 )
-                holder.itemView.tv_contents.buttonTintList = context.getColorStateList(R.color.black)
+                holder.itemView.tv_contents.buttonTintList =
+                    context.getColorStateList(R.color.black)
             }
         }
     }

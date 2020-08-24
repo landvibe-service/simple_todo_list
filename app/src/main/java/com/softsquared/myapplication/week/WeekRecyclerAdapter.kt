@@ -2,8 +2,9 @@ package com.softsquared.myapplication.week
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
@@ -52,8 +53,12 @@ class WeekRecyclerAdapter(viewModel: MainViewModel) :
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.setMargins(0, 0, 0, 30)
-
+        val marginParam = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        marginParam.setMargins(10, 0, 0, 0)
+        holder.itemView.ll_today_list.layoutParams = marginParam
 
         holder.itemView.layoutParams = params
         holder.itemView.tv_day.text = day_arr[(position % BaseCalendar.DAYS_OF_WEEK)]
@@ -114,19 +119,20 @@ class WeekRecyclerAdapter(viewModel: MainViewModel) :
         }
         if (cur.equals(LocalDate.now().toString())) {
             holder.itemView.tv_today_marker.isVisible = true
-            holder.itemView.tv_today_marker.text = "Today!"
+            holder.itemView.tv_today_marker.gravity = Gravity.RIGHT
         } else {
             holder.itemView.tv_today_marker.isVisible = false
         }
         holder.itemView.tv_date.text = baseCalendar.data[position].toString()
-        Log.e("cur, pos", "${cur +" "+day_arr[(position % BaseCalendar.DAYS_OF_WEEK)]}")
         var dayArray = viewModel.getDayList(cur)
-        //Log.e("dayArray", dayArray.toString())
+
         if (dayArray.size == 0) {
-            holder.itemView.layoutParams.height = 100
+            holder.itemView.tv_empty_item.visibility = View.VISIBLE
+        } else {
+            holder.itemView.tv_empty_item.visibility = View.GONE
         }
         var inMonthRecyclerAdapter = InMonthRecyclerAdapter(
-            ArrayList(dayArray ),
+            ArrayList(dayArray),
             cur,
             viewModel = this.viewModel
         )
@@ -149,11 +155,13 @@ class WeekRecyclerAdapter(viewModel: MainViewModel) :
             curYearMonth = df.format(it.time).toString()
         }
     }
+
     fun changeToCurMonth() {
         baseCalendar.changeToCurMonth {
             curYearMonth = df.format(it.time).toString()
         }
     }
+
     fun changeToNextMonth() {
         baseCalendar.changeToNextMonth {
             curYearMonth = df.format(it.time).toString()

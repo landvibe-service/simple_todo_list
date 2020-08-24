@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:fontFamily="@font/nanumbarungothic"
         android:id="@+id/dialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +16,7 @@
         android:layout_marginTop="24dp"
         android:text="일정 추가"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textSize="18dp"
         android:textStyle="bold" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,6 +31,7 @@
             android:fontFamily="@font/nanumbarungothic"
             />
         <EditText
+            android:fontFamily="@font/nanumbarungothic"
             android:id="@+id/et_dialog_contents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,6 +60,7 @@
             android:layout_marginRight="20dp"
             android:orientation="horizontal">
             <Button
+                android:fontFamily="@font/nanumbarungothic"
                 android:id="@+id/btn_dialog_single_choice"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -65,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:text="단일선택"/>
             <Button
+                android:fontFamily="@font/nanumbarungothic"
                 android:id="@+id/btn_dialog_multi_choice"
                 android:layout_width="0dp"
                 android:textSize="12dp"
@@ -72,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="다중선택"/>
             <Button
+                android:fontFamily="@font/nanumbarungothic"
                 android:id="@+id/btn_dialog_set_routine"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -91,8 +96,10 @@
             android:layout_height="wrap_content"
             android:text="날짜"
             android:fontFamily="@font/nanumbarungothic"
+            android:textSize="14dp"
             />
         <EditText
+            android:fontFamily="@font/nanumbarungothic"
             android:id="@+id/et_dialog_sel_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,9 +107,9 @@
             android:layout_marginRight="20dp"
             android:ems="10"
             android:hint="텍스트를 입력해주세요."
-            android:inputType="textPersonName"
             android:clickable="false"
             android:focusable="false"
+            android:textSize="14dp"
             />
     </LinearLayout>
 </LinearLayout>

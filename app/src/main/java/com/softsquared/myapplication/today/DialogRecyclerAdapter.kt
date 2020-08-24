@@ -13,12 +13,8 @@ import kotlinx.android.synthetic.main.item_schedule.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-//<<<<<<< HEAD
 class DialogRecyclerAdapter(val dialog: DialogPlanMultiAdder, val set_data: MutableSet<String>) :
-//=======
-//이거도 adapter와 fragment간 관계 조금 정리 해바바~ 한번 시도해보길!!
-//class DialogRecyclerAdapter(val dialog: DialogPlanAdder, val set_data: MutableSet<String>) :
-//>>>>>>> 77fe710d59baa4970ee4bf17366766c8e22a717c
+
     RecyclerView.Adapter<ViewHolderHelper>() {
     val baseCalendar = BaseCalendar()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderHelper {
@@ -58,20 +54,18 @@ class DialogRecyclerAdapter(val dialog: DialogPlanMultiAdder, val set_data: Muta
             cur = cur + "-" + curDate
         }
         holder.itemView.tv_date.text = baseCalendar.data[position].toString()
-        val item_layout = holder.itemView.findViewById<LinearLayout>(R.id.ll_item_dialog)
-        val item_text = holder.itemView.findViewById<TextView>(R.id.tv_date)
         if (set_data.contains(cur)) {
-            item_text.setBackgroundResource(R.drawable.ic_selected_back)
+            holder.itemView.tv_date.setBackgroundResource(R.drawable.ic_selected_back)
         } else {
-            item_text.setBackgroundColor(Color.TRANSPARENT)
+            holder.itemView.tv_date.setBackgroundColor(Color.TRANSPARENT)
         }
         holder.itemView.setOnClickListener {
             if (set_data.contains(cur)) {
                 set_data.remove(cur)
-                item_text.setBackgroundColor(Color.TRANSPARENT)
+                holder.itemView.tv_date.setBackgroundColor(Color.TRANSPARENT)
             } else {
                 set_data.add(cur)
-                item_text.setBackgroundResource(R.drawable.ic_selected_back)
+                holder.itemView.tv_date.setBackgroundResource(R.drawable.ic_selected_back)
             }
         }
     }

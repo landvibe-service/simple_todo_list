@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:fontFamily="@font/nanumbarungothic"
         android:id="@+id/dialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,6 +31,7 @@
             android:fontFamily="@font/nanumbarungothic"
             />
         <EditText
+            android:fontFamily="@font/nanumbarungothic"
             android:id="@+id/et_dialog_start_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,6 +57,7 @@
             />
 
         <EditText
+            android:fontFamily="@font/nanumbarungothic"
             android:id="@+id/et_dialog_end_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,6 +85,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:fontFamily="@font/nanumbarungothic"
                 android:id="@+id/tv_dialog_sun"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -93,6 +97,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/nanumbarungothic"
                 android:id="@+id/tv_dialog_mon"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -104,6 +109,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/nanumbarungothic"
                 android:id="@+id/tv_dialog_tue"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -115,6 +121,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/nanumbarungothic"
                 android:id="@+id/tv_dialog_wed"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -126,6 +133,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/nanumbarungothic"
                 android:id="@+id/tv_dialog_thu"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -137,6 +145,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/nanumbarungothic"
                 android:id="@+id/tv_dialog_fri"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -148,6 +157,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/nanumbarungothic"
                 android:id="@+id/tv_dialog_sat"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -163,24 +173,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
         >
         <Button
+            android:fontFamily="@font/nanumbarungothic"
             android:id="@+id/btn_dialog_routine_cancle"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:layout_weight="1"
             android:text="취소"
             android:textAlignment="center"
             android:paddingTop="10dp"
+            android:textSize="13dp"
             />
         <Button
+            android:fontFamily="@font/nanumbarungothic"
             android:id="@+id/btn_dialog_routine_ok"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:layout_weight="1"
             android:text="확인"
             android:textAlignment="center"
             android:paddingTop="10dp"
+            android:textSize="13dp"
             />
     </LinearLayout>
 </LinearLayout>

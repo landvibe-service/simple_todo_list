@@ -2,7 +2,9 @@ package com.softsquared.myapplication.month
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -71,14 +73,17 @@ class MonthRecyclerAdapter(val viewModel: MainViewModel) :
         holder.itemView.tv_date.text = baseCalendar.data[position].toString()
 
         if (cur.equals(LocalDate.now().toString())) {
-            holder.itemView.tv_today_marker.text = "Today!"
-
-            holder.itemView.tv_date.isVisible = false
-            holder.itemView.tv_day.isVisible = false
+            holder.itemView.tv_date.visibility = View.GONE
+            holder.itemView.tv_day.visibility = View.GONE
+            holder.itemView.tv_today_marker.isVisible = true
+            holder.itemView.tv_today_marker.gravity = Gravity.LEFT
+        }else {
+            holder.itemView.tv_today_marker.isVisible = false
         }
-
+        val dayList = viewModel.getDayList(cur)
+        holder.itemView.divider.visibility = View.GONE
         var inMonthRecyclerAdapter = InMonthRecyclerAdapter(
-            ArrayList(viewModel.getDayList(cur)),
+            ArrayList(dayList),
             cur,
             viewModel = this.viewModel
         )

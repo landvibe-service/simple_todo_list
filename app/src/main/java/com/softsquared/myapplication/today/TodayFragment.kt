@@ -10,7 +10,6 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.softsquared.myapplication.MainViewModel
@@ -34,23 +33,28 @@ class TodayFragment : Fragment {
     var today_date: String
     val arr_day = listOf("일", "월", "화", "수", "목", "금", "토")
     val viewModel: MainViewModel
+
     constructor(vm: MainViewModel) {
         viewModel = vm
         cal = viewModel.getCalendar()
         today_date = df.format(cal.time)
-        //cal.time = Date()
     }
 
     fun loadView() {
         tv_toolbar.setText(df.format(cal.time))
         today_date = df.format(cal.time)
         tv_fragment_today_day.setText(arr_day[cal.get(Calendar.DAY_OF_WEEK) - 1])
-
+        list = ArrayList(viewModel.getDayList(df.format(cal.time)))
+        if (list.size == 0) {
+            tv_empty_today_item.visibility = View.VISIBLE
+        } else {
+            tv_empty_today_item.visibility = View.GONE
+        }
         rv_today_list.adapter = TodayRecyclerAdapter(
             activity!!,
             this,
             today_date,
-            ArrayList(viewModel.getDayList(df.format(cal.time))),
+            list,
             viewModel = viewModel
         ) { item ->
         }
@@ -66,7 +70,6 @@ class TodayFragment : Fragment {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //viewModel = ViewModelProviders.of(this)[MainViewModel::class.java]
         tv_toolbar.setText(today_date)
         ll_swiper.setOnTouchListener(OnSwipeTouchListener())
         tv_fragment_today_day.setText(arr_day[cal.get(Calendar.DAY_OF_WEEK) - 1])
@@ -92,17 +95,28 @@ class TodayFragment : Fragment {
         super.onResume()
         today_date = df.format(cal.time)
         list = ArrayList(viewModel.getDayList(today_date))
+        val lm = LinearLayoutManager(activity)
+        if (list.size == 0) {
+            tv_empty_today_item.visibility = View.VISIBLE
+        } else {
+            tv_empty_today_item.visibility = View.GONE
+        }
+        rv_today_list.layoutManager = lm
         val adapter =
-            TodayRecyclerAdapter(activity!!, this, today_date, list, viewModel = viewModel) { item ->
+            TodayRecyclerAdapter(
+                activity!!,
+                this,
+                today_date,
+                list,
+                viewModel = viewModel
+            ) { item ->
             }
         rv_today_list.adapter = adapter
         adapter.notifyDataSetChanged()
-        val lm = LinearLayoutManager(activity)
-        rv_today_list.layoutManager = lm
+
     }
 
     fun showAlertDialog(cmd: Int, todo: Todo) {
-        lateinit var dialogView: View
         lateinit var dialogText: EditText
         lateinit var btn_dialog_single_choice: Button
         lateinit var btn_dialog_multi_choice: Button
@@ -244,12 +258,18 @@ class TodayFragment : Fragment {
         lifecycleScope.launch(Dispatchers.IO) {
             todo.gid = viewModel.getNewGid()
             viewModel.update(todo)
+            list = ArrayList(viewModel.getDayList(df.format(cal.time)))
+            if (list.size == 0) {
+                tv_empty_today_item.visibility = View.VISIBLE
+            } else {
+                tv_empty_today_item.visibility = View.GONE
+            }
             rv_today_list.adapter =
                 TodayRecyclerAdapter(
                     activity!!,
                     todayFragment,
                     today_date,
-                    ArrayList(viewModel.getDayList(todo.day)),
+                    list,
                     viewModel = viewModel
                 ) { item ->
                 }

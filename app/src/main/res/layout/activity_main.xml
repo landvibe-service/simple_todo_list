@@ -16,8 +16,8 @@
             android:layout_gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/navigationBack"
-            app:itemBackground="@color/navigationBack"
+            android:background="@color/cardview_dark_background"
+            app:itemBackground="@color/cardview_dark_background"
             app:itemIconTint="@color/white"
             app:itemTextColor="@color/white"
             />

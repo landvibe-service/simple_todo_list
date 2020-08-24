@@ -23,6 +23,7 @@ class InMonthRecyclerAdapter(
         return ViewHolder(inflatedView)
     }
 
+
     override fun getItemCount(): Int {
         return items.size
     }

@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-
-
 /**
  * Created by WoochanLee on 25/03/2019.
  */
@@ -39,50 +37,53 @@ class BaseCalendar {
     /**
      * Change to prev month.
      */
-    fun changeToCurMonth(refreshCallback: (Calendar) -> Unit){
+    fun changeToCurMonth(refreshCallback: (Calendar) -> Unit) {
         calendar.time = Date()
         makeMonthDate(refreshCallback)
         calendar.time = Date()
     }
 
     fun changeToPrevMonth(refreshCallback: (Calendar) -> Unit) {
-        if(calendar.get(Calendar.MONTH) == 0){
+        if (calendar.get(Calendar.MONTH) == 0) {
             calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 1)
             calendar.set(Calendar.MONTH, Calendar.DECEMBER)
-        }else {
+        } else {
             calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1)
         }
         makeMonthDate(refreshCallback)
     }
-    fun getPrevMonth() : String{
+
+    fun getPrevMonth(): String {
         var ret = Calendar.getInstance()
-        if(calendar.get(Calendar.MONTH) == 0){
+        if (calendar.get(Calendar.MONTH) == 0) {
             ret.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 1)
             ret.set(Calendar.MONTH, Calendar.DECEMBER)
-        }else {
+        } else {
             ret.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1)
         }
         val sdf = SimpleDateFormat("yyyy-MM", Locale.KOREAN)
         return sdf.format(ret.time)
     }
+
     /**
      * Change to next month.
      */
     fun changeToNextMonth(refreshCallback: (Calendar) -> Unit) {
-        if(calendar.get(Calendar.MONTH) == Calendar.DECEMBER){
+        if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
             calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1)
             calendar.set(Calendar.MONTH, 0)
-        }else {
+        } else {
             calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1)
         }
         makeMonthDate(refreshCallback)
     }
-    fun getNextMonth() : String{
+
+    fun getNextMonth(): String {
         var ret = Calendar.getInstance()
-        if(calendar.get(Calendar.MONTH) == Calendar.DECEMBER){
+        if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
             ret.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1)
             ret.set(Calendar.MONTH, 0)
-        }else {
+        } else {
             ret.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1)
         }
         val sdf = SimpleDateFormat("yyyy-MM", Locale.KOREAN)
@@ -100,7 +101,8 @@ class BaseCalendar {
         prevMonthTailOffset = calendar.get(Calendar.DAY_OF_WEEK) - 1
         makePrevMonthTail(calendar.clone() as Calendar)
         makeCurrentMonth(calendar)
-        nextMonthHeadOffset = LOW_OF_CALENDAR * DAYS_OF_WEEK - (prevMonthTailOffset + currentMonthMaxDate)
+        nextMonthHeadOffset =
+            LOW_OF_CALENDAR * DAYS_OF_WEEK - (prevMonthTailOffset + currentMonthMaxDate)
         makeNextMonthHead()
         refreshCallback(calendar)
     }

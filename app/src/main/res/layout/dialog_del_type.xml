@@ -6,16 +6,21 @@
     android:paddingLeft="20dp"
     >
     <TextView
+        android:fontFamily="@font/nanumbarungothic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:textSize="15sp"
-        android:text="주기성이 있는 일정 입니다. 삭제 방식을 선택하세요."
+        android:text="그룹이 있는 일정 입니다. 삭제 방식을 선택해주세요."
         />
     <RadioGroup
         android:id="@+id/rg_type_group"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        >
         <RadioButton
+            android:fontFamily="@font/nanumbarungothic"
             android:id="@+id/rbtn_type_one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,6 +28,7 @@
             android:checked="true"
             />
         <RadioButton
+            android:fontFamily="@font/nanumbarungothic"
             android:id="@+id/rbtn_type_multi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -11,11 +11,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 //뭔가 코드 정리할수 있을 것 같은데 한번 해보고 다음에 같이 보자! !!, ? 이런걸 조금 줄일 방법도 찾아보고
 class MainActivity : AppCompatActivity() {
-    var todayFragment : TodayFragment? = null
-    var weekFragment : WeekFragment? = null
-    var monthFragment : MonthFragment? = null
+    var todayFragment: TodayFragment? = null
+    var weekFragment: WeekFragment? = null
+    var monthFragment: MonthFragment? = null
     var transaction = supportFragmentManager.beginTransaction()
-    lateinit var viewModel :MainViewModel
+    lateinit var viewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,16 +26,17 @@ class MainActivity : AppCompatActivity() {
         )
         viewModel.getBottomNavigationView().selectedItemId = R.id.bni_today
     }
+
     private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
             transaction = supportFragmentManager.beginTransaction()
             when (menuItem.itemId) {
                 R.id.bni_today -> {
-                    if(todayFragment != null){
+                    if (todayFragment != null) {
                         transaction = supportFragmentManager.beginTransaction()
                         todayFragment?.loadView()
                         transaction.show(todayFragment!!).commit()
-                    }else{
+                    } else {
                         todayFragment = TodayFragment(viewModel)
                         transaction.add(R.id.main_frame_layout, todayFragment!!)
                         transaction.show(todayFragment!!).commit()
@@ -51,11 +52,11 @@ class MainActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.bni_day_list -> {
-                    if(weekFragment != null){
+                    if (weekFragment != null) {
                         transaction = supportFragmentManager.beginTransaction()
                         weekFragment!!.reloadView()
                         transaction.show(weekFragment!!).commit()
-                    }else{
+                    } else {
                         weekFragment = WeekFragment(viewModel)
                         transaction.add(R.id.main_frame_layout, weekFragment!!)
                         transaction.show(weekFragment!!).commit()
@@ -71,11 +72,11 @@ class MainActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.bni_month -> {
-                    if(monthFragment != null){
+                    if (monthFragment != null) {
                         transaction = supportFragmentManager.beginTransaction()
                         monthFragment!!.reloadView()
                         transaction.show(monthFragment!!).commit()
-                    }else{
+                    } else {
                         monthFragment = MonthFragment(viewModel)
                         transaction.add(R.id.main_frame_layout, monthFragment!!)
                         transaction.show(monthFragment!!).commit()
