@@ -275,9 +275,11 @@ class TodayFragment : Fragment {
                 }
         }
         tv_toolbar.setText(todo.day)
+
         cal.set(Calendar.YEAR, todo.day.subSequence(0, 4).toString().toInt())
         cal.set(Calendar.MONTH, todo.day.subSequence(5, 7).toString().toInt() - 1)
         cal.set(Calendar.DAY_OF_MONTH, todo.day.subSequence(8, 10).toString().toInt())
+        tv_fragment_today_day.setText(arr_day[cal.get(Calendar.DAY_OF_WEEK) - 1])
     }
 
     fun insertTodoData(

@@ -1,11 +1,13 @@
 package com.softsquared.myapplication.month
 
 import android.annotation.SuppressLint
+import android.database.DataSetObserver
 import android.graphics.Color
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListAdapter
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +20,43 @@ import java.util.*
 
 
 class MonthRecyclerAdapter(val viewModel: MainViewModel) :
-    RecyclerView.Adapter<ViewHolderHelper>() {
+    RecyclerView.Adapter<ViewHolderHelper>(), ListAdapter {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun registerDataSetObserver(observer: DataSetObserver?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getItem(position: Int): Any {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getViewTypeCount(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun isEnabled(position: Int): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun areAllItemsEnabled(): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun unregisterDataSetObserver(observer: DataSetObserver?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getCount(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun isEmpty(): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     val df = SimpleDateFormat("yyyy-mm-dd", Locale.KOREA)
     val baseCalendar = BaseCalendar()
     lateinit var curYearMonth: String

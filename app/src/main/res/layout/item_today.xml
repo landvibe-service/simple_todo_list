@@ -51,7 +51,7 @@
         android:background="@color/white"
         android:orientation="horizontal">
         <CheckBox
-            android:fontFamily="@font/nanumbarungothicbold"
+            android:fontFamily="@font/jungdong"
             android:id="@+id/tv_contents"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
